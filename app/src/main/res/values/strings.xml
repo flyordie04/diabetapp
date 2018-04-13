@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">DiabetApp</string>
+    <string name="exit_menu">exit_menu</string>
+    <string name="author_menu">Author</string>
+    <string name="Wyjdź">exit</string>
+    <string name="wyjdź">Wyjdź</string>
+    <string name="wyjscie">Wyjście</string>
+    <string name="ustawienia">Ustawienia</string>
 </resources>
