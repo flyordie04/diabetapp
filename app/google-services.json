@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "316734541658",
+    "firebase_url": "https://diabetapp-9579f.firebaseio.com",
+    "project_id": "diabetapp-9579f",
+    "storage_bucket": "diabetapp-9579f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:316734541658:android:1b1af35cbdcb5b13",
+        "android_client_info": {
+          "package_name": "com.example.mirek.diabetapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "316734541658-jaeevsb79dg23ng3hmof12081m7e9hul.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-509bEexQ-_iKpLLeEmgv8CUjqQs7i1w"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
