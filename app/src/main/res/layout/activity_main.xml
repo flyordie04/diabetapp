@@ -1,44 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.mirek.diabetapp.MainActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="0dp"
-        tools:ignore="MissingConstraints">
-
-        <EditText
-            android:id="@+id/etResult"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="numberDecimal" />
-
-        <EditText
-            android:id="@+id/etDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="date" />
+        android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/btnDodaj"
-            android:layout_width="match_parent"
+            android:id="@+id/btnRegistration"
+            android:onClick="btnRegistration_Click"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Dodaj rekord" />
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="150dp"
+            android:text="Rejestracja" />
 
         <Button
-            android:id="@+id/btnPokaz"
-            android:layout_width="match_parent"
+            android:id="@+id/btnLogin"
+            android:onClick="btnLogin_Click"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pokaż rekordy" />
-
-    </LinearLayout>
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="Logowanie" />
+    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
