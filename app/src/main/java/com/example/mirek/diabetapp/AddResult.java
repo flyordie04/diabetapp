@@ -1,0 +1,123 @@
+package com.example.mirek.diabetapp;
+
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.NumberPicker;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+public class AddResult extends AppCompatActivity{
+
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mToggle;
+    DateFormat formatDate = DateFormat.getDateInstance();
+    DateFormat formatTime = DateFormat.getTimeInstance();
+    Calendar dateTime = Calendar.getInstance();
+    private TextView textDate;
+    private TextView textTime;
+    private Button btnDate;
+    private Button btnTime;
+
+    NumberPicker noPicker = null;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_result);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
+        mDrawerLayout.addDrawerListener(mToggle);
+        mToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        textDate = findViewById(R.id.txtDatePicker);
+        textTime = findViewById(R.id.txtTimePicker);
+
+        btnDate = findViewById(R.id.btnDatePicker);
+        btnTime = findViewById(R.id.btnTimePicker);
+
+        btnDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateDate();
+            }
+        });
+
+        btnTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateTime();
+            }
+        });
+
+        updateTextLabel();
+
+        noPicker = findViewById(R.id.pickNumber1);
+        noPicker.setMaxValue(300);
+        noPicker.setMinValue(0);
+        noPicker.setValue(70);
+        noPicker.setWrapSelectorWheel(false);
+
+    }
+
+    private void updateDate(){
+        new DatePickerDialog(this, d, dateTime.get(Calendar.YEAR), dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    private void updateTime(){
+        new TimePickerDialog(this, t, dateTime.get(Calendar.HOUR_OF_DAY), dateTime.get(Calendar.MINUTE), true).show();
+    }
+
+    DatePickerDialog.OnDateSetListener d = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+            dateTime.set(Calendar.YEAR, i);
+            dateTime.set(Calendar.MONTH, i1);
+            dateTime.set(Calendar.DAY_OF_MONTH, i2);
+            updateTextLabel();
+
+        }
+    };
+
+    TimePickerDialog.OnTimeSetListener t = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker, int i, int i1) {
+            dateTime.set(Calendar.HOUR_OF_DAY, i);
+            dateTime.set(Calendar.MINUTE, i1);
+            updateTextLabel();
+
+        }
+    };
+
+    private void updateTextLabel(){
+
+        textDate.setText(formatDate.format(dateTime.getTime()));
+        textTime.setText(formatTime.format(dateTime.getTime()));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(mToggle.onOptionsItemSelected(item)){
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+   
+}
