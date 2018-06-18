@@ -2,6 +2,7 @@ package com.example.mirek.diabetapp;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -16,6 +17,11 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -34,6 +40,12 @@ public class AddResult extends AppCompatActivity{
     private Button btnTime;
 
     NumberPicker noPicker = null;
+
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mDatabaseReference;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+
 
 
     @Override
@@ -73,6 +85,14 @@ public class AddResult extends AppCompatActivity{
         noPicker.setMinValue(0);
         noPicker.setValue(70);
         noPicker.setWrapSelectorWheel(false);
+
+
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mDatabaseReference = mFirebaseDatabase.getReference();
+
+
+
+
 
     }
 
@@ -117,6 +137,17 @@ public class AddResult extends AppCompatActivity{
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void addResult(View v){
+        String number=""+noPicker.getValue();
+        String date = ""+formatDate.format(dateTime.getTime());
+        String time = ""+formatTime.format(dateTime.getTime());
+        if(user != null) {
+            String email = ""+user.getUid();
+            mDatabaseReference.child(email).child("diabetes").child(date).child(time).setValue(number);
+        }
+
     }
 
    

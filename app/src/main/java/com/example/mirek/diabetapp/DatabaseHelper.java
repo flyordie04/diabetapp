@@ -44,7 +44,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public boolean wstawdane(String result, String date, int text_message){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put("Result", result);
         cv.put("Date", date);
         cv.put("Text_message", text_message);
         if(db.insert(table_results, null, cv)==-1)return false;
