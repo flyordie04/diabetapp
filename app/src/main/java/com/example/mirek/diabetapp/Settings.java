@@ -9,77 +9,67 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class Settings extends AppCompatActivity {
-    DatabaseHelper db;
-    Button btnSave,btnPokaz;
-    EditText etPhoneNumber;
+import com.example.mirek.diabetapp.models.UserInformation;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
+public class Settings extends AppCompatActivity {
+
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mDatabaseReference;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+    private EditText etPhoneNumber;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        db = new DatabaseHelper(this);
-        btnSave = findViewById(R.id.btnSave);
-        btnPokaz = findViewById(R.id.btnPokaz);
-
         etPhoneNumber = findViewById(R.id.etPhoneNumber);
 
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mDatabaseReference = mFirebaseDatabase.getReference();
 
-                boolean powodzenie;
-                powodzenie = db.aktualizujUstawienia(etPhoneNumber.getText().toString());
-                if (powodzenie) {
-                    Toast.makeText(Settings.this, "Powodzenie", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(Settings.this, "Nie udało się", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-        btnPokaz.setOnClickListener(new View.OnClickListener() {
+        mDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View view) {
-                Log.d("Settings","1");
-                SQLiteCursor kursor = db.pokazUstawienia();
-                Log.d("Settings","2");
-                if (kursor.getCount() > 0) {
-                    Log.d("Settings","3");
-                    StringBuffer buff = new StringBuffer();
-                    while (kursor.moveToNext()) {
-                        buff.append("ID: " + kursor.getString(0) + "\n");
-                        buff.append("Numer: " + kursor.getString(1) + "\n");
-                    }
-                    PokazWiadomosc("Rekord",buff.toString());
-                } else {
-                    PokazWiadomosc("Brak", "Brak rekordów");
-                }
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+
+                String phoneNumber = dataSnapshot.child(user.getUid()).child("settings").getValue(UserInformation.class).getPhone_number();
+                etPhoneNumber.setText(phoneNumber, TextView.BufferType.EDITABLE);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("ERROR", "Failed to read value.", error.toException());
+                Toast.makeText(Settings.this, error.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
-    public void PokazWiadomosc(String tytul, String wiadomosc) {
-        AlertDialog.Builder budowniczy = new AlertDialog.Builder(this);
-        budowniczy.setCancelable(true);
-        budowniczy.setMessage(wiadomosc);
-        budowniczy.setTitle(tytul);
-        budowniczy.show();
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        int id = item.getItemId();
 
-        if(id == android.R.id.home){
-            this.finish();
+
+    public void saveSettings(View v){
+        String number = ""+etPhoneNumber.getText().toString();
+        if(user != null) {
+            String email = ""+user.getUid();
+            mDatabaseReference.child(email).child("settings").child("phone_number").setValue(number);
         }
-        return super.onOptionsItemSelected(item);
     }
 
 }

@@ -2,7 +2,7 @@ package com.example.mirek.diabetapp;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.provider.ContactsContract;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -16,7 +16,6 @@ import android.widget.DatePicker;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,10 +23,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class AddResult extends AppCompatActivity{
+public class AddResult extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
@@ -52,7 +50,7 @@ public class AddResult extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_result);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        mDrawerLayout = findViewById(R.id.drawer);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
@@ -90,8 +88,8 @@ public class AddResult extends AppCompatActivity{
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
 
-
-
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
 
     }
@@ -140,15 +138,39 @@ public class AddResult extends AppCompatActivity{
     }
 
     public void addResult(View v){
-        String number=""+noPicker.getValue();
+        String stringNumber=""+noPicker.getValue();
+        int number = noPicker.getValue();
         String date = ""+formatDate.format(dateTime.getTime());
         String time = ""+formatTime.format(dateTime.getTime());
         if(user != null) {
             String email = ""+user.getUid();
-            mDatabaseReference.child(email).child("diabetes").child(date).child(time).setValue(number);
+            mDatabaseReference.child(email).child("diabetes").child(date).child(time).setValue(stringNumber);
+            if(number>70) {
+                Intent i = new Intent(AddResult.this, SendSmsActivity.class);
+                i.putExtra("number", stringNumber);
+                startActivity(i);
+            }
         }
 
     }
 
-   
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.settings) {
+            Intent i = new Intent(AddResult.this, Settings.class);
+            startActivity(i);
+        }
+        else if(id == R.id.log){
+
+        }
+
+
+
+        return false;
+    }
+
+
 }
