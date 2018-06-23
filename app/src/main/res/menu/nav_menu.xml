@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/home"
-        android:title="Home">
+        android:title="Dodaj wynik badania">
+    </item>
+    <item android:id="@+id/addInsulin"
+        android:title="Dodaj insulinę">
+    </item>
+    <item android:id="@+id/addActivity"
+        android:title="Dodaj aktywność fizyczną">
+    </item>
+    <item android:id="@+id/statistics"
+        android:title="Statystyki">
+    </item>
+    <item android:id="@+id/table"
+        android:title="Tabela wymienników">
     </item>
     <item android:id="@+id/settings"
         android:title="Ustawienia">

@@ -65,5 +65,16 @@
             android:layout_marginBottom="140dp"
             android:text="Zaloguj" />
 
+        <TextView
+            android:id="@+id/txtBack"
+            android:textSize= "20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="18dp"
+            android:onClick="back"
+            android:text="Wróć" />
+
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

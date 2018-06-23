@@ -3,17 +3,14 @@ package com.example.mirek.diabetapp;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.NumberPicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -25,45 +22,40 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.text.DateFormat;
 import java.util.Calendar;
 
-public class AddResult extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class AddInsulinActivity extends AppCompatActivity {
 
-    private DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mToggle;
     DateFormat formatDate = DateFormat.getDateInstance();
     DateFormat formatTime = DateFormat.getTimeInstance();
     Calendar dateTime = Calendar.getInstance();
+
     private TextView textDate;
     private TextView textTime;
+    private TextView textBack;
+
+    private EditText etInsulin;
 
     private Button btnDate;
     private Button btnTime;
-    private Button btnBluetooth;
-
-    NumberPicker noPicker = null;
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_result);
-        mDrawerLayout = findViewById(R.id.drawer);
-        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
-        mDrawerLayout.addDrawerListener(mToggle);
-        mToggle.syncState();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setContentView(R.layout.activity_add_insulin);
 
         textDate = findViewById(R.id.txtDatePicker);
         textTime = findViewById(R.id.txtTimePicker);
+        textBack = findViewById(R.id.txtBack);
+
+        textBack.setPaintFlags(textBack.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+        etInsulin = findViewById(R.id.etInsulin);
 
         btnDate = findViewById(R.id.btnDatePicker);
         btnTime = findViewById(R.id.btnTimePicker);
-        btnBluetooth = findViewById(R.id.btnBluetooth);
 
         btnDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,20 +73,8 @@ public class AddResult extends AppCompatActivity implements NavigationView.OnNav
 
         updateTextLabel();
 
-        noPicker = findViewById(R.id.pickNumber1);
-        noPicker.setMaxValue(300);
-        noPicker.setMinValue(0);
-        noPicker.setValue(70);
-        noPicker.setWrapSelectorWheel(false);
-
-
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
-
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-
     }
 
     private void updateDate(){
@@ -132,66 +112,21 @@ public class AddResult extends AppCompatActivity implements NavigationView.OnNav
         textTime.setText(formatTime.format(dateTime.getTime()));
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(mToggle.onOptionsItemSelected(item)){
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
-    public void addResult(View v){
-        String stringNumber=""+noPicker.getValue();
-        int number = noPicker.getValue();
+    public void addInsulin(View v){
         String date = ""+formatDate.format(dateTime.getTime());
         String time = ""+formatTime.format(dateTime.getTime());
+        String stringNumber = ""+etInsulin.getText();
+
         if(user != null) {
             String email = ""+user.getUid();
-            mDatabaseReference.child(email).child("diabetes").child(date).child(time).setValue(stringNumber);
-            if(number>70) {
-                Intent i = new Intent(AddResult.this, SendSmsActivity.class);
-                i.putExtra("number", stringNumber);
-                startActivity(i);
-            }
+            mDatabaseReference.child(email).child("insulin").child(date).child(time).setValue(stringNumber);
         }
 
     }
 
-    public void bluetoothMode(View v){
-        Intent i = new Intent(AddResult.this, BluetoothActivity.class);
+    public void back(View v){
+        Intent i = new Intent(AddInsulinActivity.this, AddResult.class);
         startActivity(i);
     }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        if(id == R.id.settings) {
-            Intent i = new Intent(AddResult.this, Settings.class);
-            startActivity(i);
-        }
-        else if(id == R.id.log){
-            FirebaseAuth.getInstance().signOut();
-            Intent i = new Intent(AddResult.this, MainActivity.class);
-            startActivity(i);
-        }
-        else if(id == R.id.addInsulin){
-            Intent i = new Intent(AddResult.this, AddInsulinActivity.class);
-            startActivity(i);
-        }
-        else if(id == R.id.addActivity){
-
-        }
-        else if(id == R.id.table){
-
-        }
-        else if(id == R.id.statistics){
-
-        }
-
-        return false;
-    }
-
-
-
 }

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.mirek.diabetapp.AddInsulinActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="DODAJ INSULINĘ"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/txtDatePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/btnDatePicker"
+            android:layout_alignRight="@+id/btnDatePicker"
+            android:layout_below="@+id/textView5"
+            android:layout_marginEnd="38dp"
+            android:layout_marginRight="38dp"
+            android:layout_marginTop="23dp"
+            android:text="Data"
+            app:layout_constraintBottom_toTopOf="@+id/btnDatePicker"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/txtTimePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/txtDatePicker"
+            android:layout_alignBottom="@+id/txtDatePicker"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="35dp"
+            android:layout_marginRight="35dp"
+            android:text="Godzina"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:layout_editor_absoluteY="70dp" />
+
+        <Button
+            android:id="@+id/btnDatePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/txtDatePicker"
+            android:text="Zmień datę"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="104dp" />
+
+        <Button
+            android:id="@+id/btnTimePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/txtTimePicker"
+            android:text="Zmień godzinę"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtTimePicker" />
+
+        <EditText
+            android:id="@+id/etInsulin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView6"
+            android:layout_centerHorizontal="true"
+            android:ems="10"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btnTimePicker"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="21dp"
+            android:text="Wpisz dawkę insuliny (ilość jednostek)" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="347dp"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/txtBack"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="14dp"
+            android:onClick="addInsulin"
+            android:text="Dodaj" />
+
+        <TextView
+            android:id="@+id/txtBack"
+            android:textSize= "20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="18dp"
+            android:onClick="back"
+            android:text="Wróć" />
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

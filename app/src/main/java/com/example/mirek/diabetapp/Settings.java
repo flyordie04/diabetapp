@@ -1,6 +1,8 @@
 package com.example.mirek.diabetapp;
 
+import android.content.Intent;
 import android.database.sqlite.SQLiteCursor;
+import android.graphics.Paint;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,12 +35,17 @@ public class Settings extends AppCompatActivity {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     private EditText etPhoneNumber;
+
+    private TextView textBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
         etPhoneNumber = findViewById(R.id.etPhoneNumber);
+        textBack = findViewById(R.id.txtBack);
+
+        textBack.setPaintFlags(textBack.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
@@ -70,6 +77,11 @@ public class Settings extends AppCompatActivity {
             String email = ""+user.getUid();
             mDatabaseReference.child(email).child("settings").child("phone_number").setValue(number);
         }
+    }
+
+    public void back(View v){
+        Intent i = new Intent(Settings.this, AddResult.class);
+        startActivity(i);
     }
 
 }

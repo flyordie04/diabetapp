@@ -2,12 +2,14 @@ package com.example.mirek.diabetapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -20,10 +22,16 @@ public class RegistrationActivity extends AppCompatActivity{
     private EditText txtEmailAddress;
     private EditText txtPassword;
     private FirebaseAuth firebaseAuth;
+
+    private TextView textBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+
+        textBack = findViewById(R.id.txtBack);
+        textBack.setPaintFlags(textBack.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
         txtEmailAddress = findViewById(R.id.txtEmailAddress);
         txtPassword = findViewById(R.id.txtPasswordRegistration);
         firebaseAuth = FirebaseAuth.getInstance();
@@ -48,5 +56,10 @@ public class RegistrationActivity extends AppCompatActivity{
             }
         });
 
+    }
+
+    public void back(View v){
+        Intent i = new Intent(RegistrationActivity.this, MainActivity.class);
+        startActivity(i);
     }
 }
