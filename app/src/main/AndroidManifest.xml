@@ -27,7 +27,8 @@
         <activity android:name=".AddResult" />
         <activity android:name=".SendSmsActivity" />
         <activity android:name=".BluetoothActivity" />
-        <activity android:name=".AddInsulinActivity"></activity>
+        <activity android:name=".AddInsulinActivity" />
+        <activity android:name=".PhysicalActivity"></activity>
     </application>
 
 </manifest>

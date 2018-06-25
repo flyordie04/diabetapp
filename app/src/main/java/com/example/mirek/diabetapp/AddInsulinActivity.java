@@ -1,7 +1,9 @@
 package com.example.mirek.diabetapp;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
@@ -121,6 +123,17 @@ public class AddInsulinActivity extends AppCompatActivity {
         if(user != null) {
             String email = ""+user.getUid();
             mDatabaseReference.child(email).child("insulin").child(date).child(time).setValue(stringNumber);
+
+            AlertDialog alertDialog = new AlertDialog.Builder(AddInsulinActivity.this).create();
+            alertDialog.setMessage("Powodzenie, przyjęta insulina została dodana");
+            alertDialog.setTitle("Przyjęta insulina");
+            alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+            alertDialog.show();
         }
 
     }

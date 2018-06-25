@@ -1,5 +1,6 @@
 package com.example.mirek.diabetapp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteCursor;
 import android.graphics.Paint;
@@ -76,6 +77,16 @@ public class Settings extends AppCompatActivity {
         if(user != null) {
             String email = ""+user.getUid();
             mDatabaseReference.child(email).child("settings").child("phone_number").setValue(number);
+            android.app.AlertDialog alertDialog = new android.app.AlertDialog.Builder(Settings.this).create();
+            alertDialog.setMessage("Dane zaktualizowane");
+            alertDialog.setTitle("Ustawienia");
+            alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+            alertDialog.show();
         }
     }
 

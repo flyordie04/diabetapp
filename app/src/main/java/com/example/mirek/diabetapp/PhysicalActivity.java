@@ -5,17 +5,16 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.NumberPicker;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -27,45 +26,51 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.text.DateFormat;
 import java.util.Calendar;
 
-public class AddResult extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class PhysicalActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    private DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mToggle;
     DateFormat formatDate = DateFormat.getDateInstance();
     DateFormat formatTime = DateFormat.getTimeInstance();
     Calendar dateTime = Calendar.getInstance();
+
     private TextView textDate;
     private TextView textTime;
+    private TextView textBack;
+    private TextView txtChosen;
+
+    private EditText etTimeInterval;
 
     private Button btnDate;
     private Button btnTime;
-    private Button btnBluetooth;
 
-    NumberPicker noPicker = null;
+    private Spinner spinner;
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_result);
-        mDrawerLayout = findViewById(R.id.drawer);
-        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
-        mDrawerLayout.addDrawerListener(mToggle);
-        mToggle.syncState();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setContentView(R.layout.activity_physical);
+
 
         textDate = findViewById(R.id.txtDatePicker);
         textTime = findViewById(R.id.txtTimePicker);
+        textBack = findViewById(R.id.txtBack);
+        txtChosen = findViewById(R.id.txtChosen);
+
+        etTimeInterval = findViewById(R.id.etTimeInterval);
+
+        textBack.setPaintFlags(textBack.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+        spinner = findViewById(R.id.spinner1);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.physical_types, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
 
         btnDate = findViewById(R.id.btnDatePicker);
         btnTime = findViewById(R.id.btnTimePicker);
-        btnBluetooth = findViewById(R.id.btnBluetooth);
 
         btnDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,19 +88,18 @@ public class AddResult extends AppCompatActivity implements NavigationView.OnNav
 
         updateTextLabel();
 
-        noPicker = findViewById(R.id.pickNumber1);
-        noPicker.setMaxValue(300);
-        noPicker.setMinValue(0);
-        noPicker.setValue(70);
-        noPicker.setWrapSelectorWheel(false);
-
-
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
+    }
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        String physicalActivity = adapterView.getItemAtPosition(i).toString();
+        txtChosen.setText(physicalActivity);
+    }
 
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
 
@@ -134,78 +138,33 @@ public class AddResult extends AppCompatActivity implements NavigationView.OnNav
         textTime.setText(formatTime.format(dateTime.getTime()));
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(mToggle.onOptionsItemSelected(item)){
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
-    public void addResult(View v){
-        String stringNumber=""+noPicker.getValue();
-        int number = noPicker.getValue();
+    public void addPhysical(View v){
+        String timeInterval = ""+etTimeInterval.getText().toString();
+        String physicalActivity = ""+txtChosen.getText();
         String date = ""+formatDate.format(dateTime.getTime());
         String time = ""+formatTime.format(dateTime.getTime());
+
         if(user != null) {
             String email = ""+user.getUid();
-            mDatabaseReference.child(email).child("diabetes").child(date).child(time).setValue(stringNumber);
-            if(number>70) {
-                Intent i = new Intent(AddResult.this, SendSmsActivity.class);
-                i.putExtra("number", stringNumber);
-                startActivity(i);
-            } else {
-                AlertDialog alertDialog = new AlertDialog.Builder(AddResult.this).create();
-                alertDialog.setMessage("Wartość dodana - poziom cukru w normie");
-                alertDialog.setTitle("Poziom cukru dodany");
-                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+            mDatabaseReference.child(email).child("physical_activity").child(date).child(time).child(physicalActivity).setValue(timeInterval);
+            AlertDialog alertDialog = new AlertDialog.Builder(PhysicalActivity.this).create();
+            alertDialog.setMessage("Powodzenie, aktywność została dodana");
+            alertDialog.setTitle("Aktywność fizyczna");
+            alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
 
-                    }
-                });
-                alertDialog.show();
-            }
+                }
+            });
+            alertDialog.show();
         }
 
     }
 
-    public void bluetoothMode(View v){
-        Intent i = new Intent(AddResult.this, BluetoothActivity.class);
+    public void back(View v){
+        Intent i = new Intent(PhysicalActivity.this, AddResult.class);
         startActivity(i);
     }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        if(id == R.id.settings) {
-            Intent i = new Intent(AddResult.this, Settings.class);
-            startActivity(i);
-        }
-        else if(id == R.id.log){
-            FirebaseAuth.getInstance().signOut();
-            Intent i = new Intent(AddResult.this, MainActivity.class);
-            startActivity(i);
-        }
-        else if(id == R.id.addInsulin){
-            Intent i = new Intent(AddResult.this, AddInsulinActivity.class);
-            startActivity(i);
-        }
-        else if(id == R.id.addActivity){
-            Intent i = new Intent(AddResult.this, PhysicalActivity.class);
-            startActivity(i);
-        }
-        else if(id == R.id.table){
-
-        }
-        else if(id == R.id.statistics){
-
-        }
-
-        return false;
-    }
-
-
 
 }
