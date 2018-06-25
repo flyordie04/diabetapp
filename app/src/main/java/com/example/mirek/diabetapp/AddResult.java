@@ -39,7 +39,6 @@ public class AddResult extends AppCompatActivity implements NavigationView.OnNav
 
     private Button btnDate;
     private Button btnTime;
-    private Button btnBluetooth;
 
     NumberPicker noPicker = null;
 
@@ -65,7 +64,6 @@ public class AddResult extends AppCompatActivity implements NavigationView.OnNav
 
         btnDate = findViewById(R.id.btnDatePicker);
         btnTime = findViewById(R.id.btnTimePicker);
-        btnBluetooth = findViewById(R.id.btnBluetooth);
 
         btnDate.setOnClickListener(new View.OnClickListener() {
             @Override

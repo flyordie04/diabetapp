@@ -31,8 +31,7 @@
             android:layout_height="60dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="77dp"
+            android:layout_below="@+id/textView"
             android:ems="10"
             android:inputType="phone"
             tools:layout_editor_absoluteX="16dp"
@@ -59,6 +58,46 @@
             android:layout_marginBottom="18dp"
             android:onClick="back"
             android:text="Wróć" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView4"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="46dp"
+            android:text="POWIADOMIENIA" />
+
+        <TextView
+            android:id="@+id/txtTimePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/textView8"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="13dp"
+            android:text="Godzina"
+            tools:layout_editor_absoluteY="70dp" />
+
+        <Button
+            android:id="@+id/btnTimePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/txtTimePicker"
+            android:text="Zmień godzinę" />
+
+        <CheckBox
+            android:id="@+id/cbDiabete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/txtTimePicker"
+            android:text="Zbadaj poziom cukru" />
 
     </RelativeLayout>
 
