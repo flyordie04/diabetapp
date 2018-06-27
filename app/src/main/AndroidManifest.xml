@@ -30,9 +30,12 @@
         <activity android:name=".SendSmsActivity" />
         <activity android:name=".BluetoothActivity" />
         <activity android:name=".AddInsulinActivity" />
-        <activity android:name=".PhysicalActivity">
-        </activity>
-        <receiver android:name=".Notification_receiver"/>
+        <activity android:name=".PhysicalActivity" />
+
+        <receiver android:name=".Notification_receiver" />
+
+        <activity android:name=".StatisticsActivity" />
+        <activity android:name=".DiabeteStatisticsActivity"></activity>
     </application>
 
 </manifest>

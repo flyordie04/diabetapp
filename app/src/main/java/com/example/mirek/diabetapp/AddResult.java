@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class AddResult extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -198,7 +199,8 @@ public class AddResult extends AppCompatActivity implements NavigationView.OnNav
 
         }
         else if(id == R.id.statistics){
-
+            Intent i = new Intent(AddResult.this, StatisticsActivity.class);
+            startActivity(i);
         }
 
         return false;

@@ -86,8 +86,10 @@ public class Settings extends AppCompatActivity {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
 
-                String phoneNumber = dataSnapshot.child(user.getUid()).child("settings").getValue(UserInformation.class).getPhone_number();
-                etPhoneNumber.setText(phoneNumber, TextView.BufferType.EDITABLE);
+                if(dataSnapshot.child(user.getUid()).child("settings").getValue()!= null) {
+                    String phoneNumber = dataSnapshot.child(user.getUid()).child("settings").getValue(UserInformation.class).getPhone_number();
+                    etPhoneNumber.setText(phoneNumber, TextView.BufferType.EDITABLE);
+}
             }
 
             @Override

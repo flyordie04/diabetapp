@@ -8,7 +8,13 @@
     <string name="wyjdź">Wyjdź</string>
     <string name="wyjscie">Wyjście</string>
     <string name="ustawienia">Ustawienia</string>
-    
+
+    <string-array name="diabete_length">
+        <item>Tydzień</item>
+        <item>Miesiąc</item>
+        <item>Wszystko</item>
+    </string-array>
+
     <string-array name="physical_types">
         <item>Aerobik</item>
         <item>Badminton</item>
