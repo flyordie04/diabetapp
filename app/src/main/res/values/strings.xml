@@ -17,57 +17,14 @@
 
     <string-array name="physical_types">
         <item>Aerobik</item>
-        <item>Badminton</item>
-        <item>Baseball</item>
-        <item>Bieg na bieżni</item>
-        <item>Bieg na orientacje</item>
         <item>Bieganie</item>
-        <item>Biegi terenowe</item>
-        <item>Boks</item>
         <item>Chodzenie</item>
-        <item>Chodzenie po bieżni</item>
-        <item>Futbol amerykański</item>
-        <item>Gimnastyka</item>
-        <item>Golf</item>
-        <item>Hokej</item>
-        <item>Hulajnoga</item>
-        <item>Inne</item>
-        <item>Jazda konna</item>
-        <item>Jazda na deskorolce</item>
         <item>Jazda na rolkach</item>
         <item>Jazda na rowerze</item>
-        <item>Jazda na wózku</item>
-        <item>Jazda na łyżwach</item>
-        <item>Joga</item>
-        <item>Kajakarstwo</item>
-        <item>Kolarstwo</item>
-        <item>Kolarstwo górskie</item>
-        <item>Kolarstwo stacjonarne</item>
         <item>Koszykówka</item>
-        <item>Narciarstwo biegowe</item>
-        <item>Narciarstwo zjazdowe</item>
-        <item>Nordic walking</item>
-        <item>Pilates</item>
         <item>Piłka nożna</item>
-        <item>Piłka ręczna</item>
         <item>Pływanie</item>
-        <item>Rugby</item>
-        <item>Siatkówka halowa</item>
-        <item>Siatkówka plażowa</item>
-        <item>Skakanka</item>
-        <item>Squash</item>
+        <item>Siatkówka</item>
         <item>Sztuki walki</item>
-        <item>Taniec</item>
-        <item>Tenis</item>
-        <item>Tenis stołowy</item>
-        <item>Trening eliptyczny</item>
-        <item>Trening obwodowy</item>
-        <item>Trening siłowy</item>
-        <item>Unihokej</item>
-        <item>Wchodzenie po schodach</item>
-        <item>Wioślarstwo</item>
-        <item>Wspinaczka</item>
-        <item>Wycieczki piesze</item>
-        <item>Żeglarstwo</item>
     </string-array>
 </resources>

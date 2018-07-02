@@ -36,8 +36,10 @@ public class RegistrationActivity extends AppCompatActivity{
         txtPassword = findViewById(R.id.txtPasswordRegistration);
         firebaseAuth = FirebaseAuth.getInstance();
     }
+
     public void btnRegistrationUser_Click(View v){
         final ProgressDialog progressDialog = ProgressDialog.show(RegistrationActivity.this, "Proszę czekać...", "Rejestracja w toku.", true);
+
         (firebaseAuth.createUserWithEmailAndPassword(txtEmailAddress.getText().toString(), txtPassword.getText().toString()))
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>(){
             @Override
