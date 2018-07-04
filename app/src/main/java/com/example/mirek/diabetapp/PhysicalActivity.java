@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class PhysicalActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -144,14 +145,15 @@ public class PhysicalActivity extends AppCompatActivity implements AdapterView.O
     public void addPhysical(View v){
         String timeInterval = ""+etTimeInterval.getText().toString();
         String physicalActivity = ""+txtChosen.getText();
-        String date = ""+formatDate.format(dateTime.getTime());
-        String time = ""+formatTime.format(dateTime.getTime());
+        //String date = ""+formatDate.format(dateTime.getTime());
+        //String time = ""+formatTime.format(dateTime.getTime());
         double calories = calories(Integer.parseInt(timeInterval));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM dd yyyy hh:mm");
         if(user != null) {
             String email = ""+user.getUid();
-            mDatabaseReference.child(email).child("physical_activity").child(date).child(time).child(physicalActivity).setValue(calories);
+            mDatabaseReference.child(email).child("physical_activity").child(simpleDateFormat.format(dateTime.getTime())).child(physicalActivity).setValue(calories);
             AlertDialog alertDialog = new AlertDialog.Builder(PhysicalActivity.this).create();
-            alertDialog.setMessage("Powodzenie, aktywność została dodana");
+            alertDialog.setMessage("Brawo! Podczas tej aktywności straciłeś " + calories +" kalorii!");
             alertDialog.setTitle("Aktywność fizyczna");
             alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
                 @Override

@@ -63,7 +63,7 @@ public class DiabeteStatisticsActivity extends AppCompatActivity implements Adap
         setContentView(R.layout.activity_diabete_statistics);
 
         mSpinner = findViewById(R.id.spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.diabete_length, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.length, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(adapter);
         mSpinner.setOnItemSelectedListener(this);
@@ -82,9 +82,6 @@ public class DiabeteStatisticsActivity extends AppCompatActivity implements Adap
                                 Locale.ENGLISH);
                         Date parsedDate = sdf.parse(data);
                         dates.add(parsedDate);
-                        int size = dates.size();
-                        Log.d("qwertyu", Integer.toString(size) );
-                        Log.d("qwertyu", dates.toString());
                     } catch (java.text.ParseException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -117,21 +114,20 @@ public class DiabeteStatisticsActivity extends AppCompatActivity implements Adap
 
     }
     void graphDrawer(ArrayList<Date> dates, ArrayList<Integer> values){
-        Log.d("graph drawer","działą");
         series = new LineGraphSeries<>(dateAdd(dates, values));
         DateFormat sdf = new SimpleDateFormat("dd/MM");
         mGraphView = findViewById(R.id.diabeteGraph);
         mGraphView.addSeries(series);
 
-        mGraphView.getViewport().setYAxisBoundsManual(true);
         mGraphView.getViewport().setMinY(0);
         mGraphView.getViewport().setMaxY(140);
-
         mGraphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getApplicationContext(), sdf));
-
-        mGraphView.getViewport().setMinX(series.getLowestValueX());
-        mGraphView.getViewport().setMaxX(series.getHighestValueX());
+        mGraphView.getViewport().setYAxisBoundsManual(true);
         mGraphView.getViewport().setXAxisBoundsManual(true);
+        //mGraphView.getViewport().setScalable(true);
+        mGraphView.getViewport().setScrollable(true);
+        mGraphView.getViewport().setMinX(series.getLowestValueX());
+        //mGraphView.getViewport().setMaxX(series.getHighestValueX());
     }
     private DataPoint[] dateAdd(ArrayList<Date> dates, ArrayList<Integer> values){
         Date[] datesString = dates.toArray(new Date[dates.size()]);

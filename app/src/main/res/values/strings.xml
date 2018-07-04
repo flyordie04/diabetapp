@@ -9,10 +9,10 @@
     <string name="wyjscie">Wyjście</string>
     <string name="ustawienia">Ustawienia</string>
 
-    <string-array name="diabete_length">
+    <string-array name="length">
         <item>Tydzień</item>
+        <item>Dwa tygodnie</item>
         <item>Miesiąc</item>
-        <item>Wszystko</item>
     </string-array>
 
     <string-array name="physical_types">

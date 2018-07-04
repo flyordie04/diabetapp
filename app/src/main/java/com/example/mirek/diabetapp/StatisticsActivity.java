@@ -16,4 +16,8 @@ public class StatisticsActivity extends AppCompatActivity {
         Intent i = new Intent(StatisticsActivity.this, DiabeteStatisticsActivity.class);
         startActivity(i);
     }
+    public void physicalStatistics(View v){
+        Intent i = new Intent(StatisticsActivity.this, PhysicalStatisticsActivity.class);
+        startActivity(i);
+    }
 }
