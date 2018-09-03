@@ -144,11 +144,10 @@ public class AddResult extends AppCompatActivity implements NavigationView.OnNav
     public void addResult(View v){
         String stringNumber=""+noPicker.getValue();
         int number = noPicker.getValue();
-        String date = ""+formatDate.format(dateTime.getTime());
-        String time = ""+formatTime.format(dateTime.getTime());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM dd yyyy hh:mm");
         if(user != null) {
             String email = ""+user.getUid();
-            mDatabaseReference.child(email).child("diabetes").child(date).child(time).setValue(stringNumber);
+            mDatabaseReference.child(email).child("diabetes").child(simpleDateFormat.format(dateTime.getTime())).setValue(stringNumber);
             if(number>70) {
                 Intent i = new Intent(AddResult.this, SendSmsActivity.class);
                 i.putExtra("number", stringNumber);
@@ -196,7 +195,8 @@ public class AddResult extends AppCompatActivity implements NavigationView.OnNav
             startActivity(i);
         }
         else if(id == R.id.table){
-
+            Intent i = new Intent(AddResult.this, TableCarboActivity.class);
+            startActivity(i);
         }
         else if(id == R.id.statistics){
             Intent i = new Intent(AddResult.this, StatisticsActivity.class);

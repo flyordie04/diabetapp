@@ -145,8 +145,6 @@ public class PhysicalActivity extends AppCompatActivity implements AdapterView.O
     public void addPhysical(View v){
         String timeInterval = ""+etTimeInterval.getText().toString();
         String physicalActivity = ""+txtChosen.getText();
-        //String date = ""+formatDate.format(dateTime.getTime());
-        //String time = ""+formatTime.format(dateTime.getTime());
         double calories = calories(Integer.parseInt(timeInterval));
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM dd yyyy hh:mm");
         if(user != null) {
