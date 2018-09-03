@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -150,7 +151,9 @@ public class AddResult extends AppCompatActivity implements NavigationView.OnNav
             mDatabaseReference.child(email).child("diabetes").child(simpleDateFormat.format(dateTime.getTime())).setValue(stringNumber);
             if(number>70) {
                 Intent i = new Intent(AddResult.this, SendSmsActivity.class);
-                i.putExtra("number", stringNumber);
+                Log.e("wynik cukru", stringNumber);
+                i.putExtra("STRING_I_NEED", stringNumber);
+                i.putExtra("DATA_BADANIA", simpleDateFormat.format(dateTime.getTime()));
                 startActivity(i);
             } else {
                 AlertDialog alertDialog = new AlertDialog.Builder(AddResult.this).create();

@@ -52,13 +52,14 @@ public class SendSmsActivity extends AppCompatActivity {
         final String number;
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
+            Log.e("extras",extras.toString());
             if(extras == null) {
-                number= null;
+                number = null;
             } else {
-                number= extras.getString("STRING_I_NEED");
+                number = extras.getString("STRING_I_NEED");
             }
         } else {
-            number= (String) savedInstanceState.getSerializable("STRING_I_NEED");
+            number = (String) savedInstanceState.getSerializable("STRING_I_NEED");
         }
 
         mDatabaseReference.addValueEventListener(new ValueEventListener() {
@@ -67,6 +68,7 @@ public class SendSmsActivity extends AppCompatActivity {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 String phoneNumber = dataSnapshot.child(user.getUid()).child("settings").getValue(UserInformation.class).getPhone_number();
+                Log.e("final number",number);
                 send(number, phoneNumber);
 
             }
@@ -91,7 +93,7 @@ public class SendSmsActivity extends AppCompatActivity {
         else {
             txtInfo.setText("Wiadomość o złym stanie cukru została wysłana na wskazany numer telefonu: "+ phoneNumber);
             SmsManager sms = SmsManager.getDefault();
-            sms.sendTextMessage(phoneNumber, null, message + number, null, null);
+            sms.sendTextMessage(phoneNumber, null,  message + number , null, null);
         }
     }
 }
