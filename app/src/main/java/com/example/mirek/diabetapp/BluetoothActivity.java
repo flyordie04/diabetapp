@@ -57,7 +57,6 @@ public class BluetoothActivity extends AppCompatActivity {
             intent.setType("text/plain");
             File file = new File(Environment.getExternalStorageDirectory(),"md5sum.txt");
             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-
             PackageManager packageManager = getPackageManager();
             List<ResolveInfo> appsList = packageManager.queryIntentActivities(intent,0);
 

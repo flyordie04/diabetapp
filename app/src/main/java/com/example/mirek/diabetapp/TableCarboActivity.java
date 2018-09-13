@@ -48,7 +48,6 @@ public class TableCarboActivity extends AppCompatActivity {
                 HashMap<String, String> m_li;
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jo_inside = jsonArray.getJSONObject(i);
-
                     String products_value = jo_inside.optString("Produkty");
                     String product_value = jo_inside.optString("Produkt");
                     String product_quantity = jo_inside.optString("Ilość w gramach");
@@ -61,47 +60,20 @@ public class TableCarboActivity extends AppCompatActivity {
                     }
                     if(!product_value.equals("")) {
                         m_li = new HashMap<String, String>();
-
                         m_li.put("product_value", product_value);
                         formList.add(m_li);
                     }
                     if(!product_quantity.equals("")) {
                         m_li = new HashMap<String, String>();
-
                         m_li.put("product_quantity", "Gramów: " + product_quantity);
                         formList.add(m_li);
                     }
                     if(!product_carboQuantity.equals("")) {
                         m_li = new HashMap<String, String>();
-
                         m_li.put("product_carboQuantity", "Ilość wymienników: " + product_carboQuantity);
                         formList.add(m_li);
                     }
-
-                    //m_li = new HashMap<String, String>();
-                    //String product_measure = jo_inside.optString("Miara domowa");
-                    //m_li.put("product_measure", product_measure);
-                    //String product_limit = jo_inside.optString("Ilość produktu zawierająca 1 WW");
-                    //m_li.put("product_limit", product_limit);
-
-                    //formList.add(m_li);
-
-
-
-                /*
-                items = new String[jsonArray.length()];
-                    for(int i = 0 ;i < items.length;i++)
-                    {
-                        for(int j=0; j <)
-                        items[i] = jsonArray.getJSONObject(i).toString();
-
-                        Log.e("item", items[i]);
-                    }
-                */
-
-
                 }
-
                 String sum = "";
                 for (HashMap<String, String> hash : formList) {
                     for (String current : hash.values()) {
