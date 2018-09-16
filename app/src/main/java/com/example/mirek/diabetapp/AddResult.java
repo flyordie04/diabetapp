@@ -149,7 +149,7 @@ public class AddResult extends AppCompatActivity implements NavigationView.OnNav
         if(user != null) {
             String email = ""+user.getUid();
             mDatabaseReference.child(email).child("diabetes").child(simpleDateFormat.format(dateTime.getTime())).setValue(stringNumber);
-            if(number>70) {
+            if(number<70 || number >140) {
                 Intent i = new Intent(AddResult.this, SendSmsActivity.class);
                 Log.e("wynik cukru", stringNumber);
                 i.putExtra("STRING_I_NEED", stringNumber);
