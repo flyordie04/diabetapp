@@ -2,6 +2,7 @@ package com.example.mirek.diabetapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -21,9 +22,12 @@ public class RegistrationActivity extends AppCompatActivity{
 
     private EditText txtEmailAddress;
     private EditText txtPassword;
+    private EditText txtPasswordRe;
     private FirebaseAuth firebaseAuth;
 
     private TextView textBack;
+
+    SharedPreferences sp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,34 +38,45 @@ public class RegistrationActivity extends AppCompatActivity{
 
         txtEmailAddress = findViewById(R.id.txtEmailAddress);
         txtPassword = findViewById(R.id.txtPasswordRegistration);
+        txtPasswordRe = findViewById(R.id.txtPasswordRegistrationRe);
         firebaseAuth = FirebaseAuth.getInstance();
+
+        sp = getSharedPreferences("login",MODE_PRIVATE);
     }
 
     public void btnRegistrationUser_Click(View v){
-        final ProgressDialog progressDialog = ProgressDialog.show(RegistrationActivity.this, "Proszę czekać...", "Rejestracja w toku.", true);
+        if(txtEmailAddress.getText().toString().equals("") || txtPassword.getText().toString().equals("")){
+            Toast.makeText(RegistrationActivity.this,"Email i hasło nie mogą być puste!", Toast.LENGTH_LONG).show();
+        } else {
+            if(!txtPassword.getText().toString().equals(txtPasswordRe.getText().toString())){
+                Toast.makeText(RegistrationActivity.this,"Hasła nie mogą się różnić!", Toast.LENGTH_LONG).show();
+            } else {
+                final ProgressDialog progressDialog = ProgressDialog.show(RegistrationActivity.this, "Proszę czekać...", "Rejestracja w toku.", true);
 
-        (firebaseAuth.createUserWithEmailAndPassword(txtEmailAddress.getText().toString(), txtPassword.getText().toString()))
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>(){
-            @Override
-                    public void onComplete(@NonNull Task<AuthResult> task){
-                progressDialog.dismiss();
+                (firebaseAuth.createUserWithEmailAndPassword(txtEmailAddress.getText().toString(), txtPassword.getText().toString()))
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                progressDialog.dismiss();
 
-                if(task.isSuccessful()){
-                    Toast.makeText(RegistrationActivity.this,"Rejestracja powiodła się!", Toast.LENGTH_LONG).show();
-                    Intent i= new Intent(RegistrationActivity.this,LoginActivity.class);
-                    startActivity(i);
-                }
-                else{
-                    Log.e("ERROR",task.getException().toString());
-                    Toast.makeText(RegistrationActivity.this,task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                }
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(RegistrationActivity.this, "Rejestracja powiodła się!", Toast.LENGTH_LONG).show();
+                                    Intent i = new Intent(RegistrationActivity.this, LoginActivity.class);
+                                    sp.edit().putBoolean("logged", true).apply();
+                                    startActivity(i);
+                                } else {
+                                    Log.e("ERROR", task.getException().toString());
+                                    Toast.makeText(RegistrationActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
             }
-        });
+        }
 
     }
 
     public void back(View v){
-        Intent i = new Intent(RegistrationActivity.this, MainActivity.class);
+        Intent i = new Intent(RegistrationActivity.this, LoginActivity.class);
         startActivity(i);
     }
 }

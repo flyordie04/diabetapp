@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -48,6 +49,7 @@ public class AddResult extends AppCompatActivity implements NavigationView.OnNav
     private DatabaseReference mDatabaseReference;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+    SharedPreferences sp;
 
 
 
@@ -96,7 +98,7 @@ public class AddResult extends AppCompatActivity implements NavigationView.OnNav
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
+        sp = getSharedPreferences("login",MODE_PRIVATE);
     }
 
     private void updateDate(){
@@ -185,8 +187,9 @@ public class AddResult extends AppCompatActivity implements NavigationView.OnNav
             startActivity(i);
         }
         else if(id == R.id.log){
+            sp.edit().putBoolean("logged",false).apply();
             FirebaseAuth.getInstance().signOut();
-            Intent i = new Intent(AddResult.this, MainActivity.class);
+            Intent i = new Intent(AddResult.this, LoginActivity.class);
             startActivity(i);
         }
         else if(id == R.id.addInsulin){

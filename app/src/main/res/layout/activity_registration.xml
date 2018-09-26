@@ -1,78 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient"
     tools:context="com.example.mirek.diabetapp.RegistrationActivity">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/textView2"
+        <ImageView
+            android:id="@+id/imageView5"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:text="Wpisz swój adres e-mail:" />
+            android:layout_marginTop="26dp"
+            app:srcCompat="@drawable/splash_without" />
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/txtEmailAddress"
-            android:layout_marginTop="22dp"
-            android:text="Wpisz hasło:" />
+    <EditText
+        android:id="@+id/txtEmailAddress"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_above="@+id/txtPasswordRegistration"
+        android:layout_alignLeft="@+id/txtPasswordRegistration"
+        android:layout_alignStart="@+id/txtPasswordRegistration"
+        android:layout_marginBottom="26dp"
+        android:background="#11000000"
+        android:drawableLeft="@drawable/ic_action_user"
+        android:ems="10"
+        android:hint="E-mail"
+        android:inputType="textEmailAddress"
+        android:textSize="16dp" />
 
-        <EditText
-            android:id="@+id/txtPasswordRegistration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+    <EditText
+        android:id="@+id/txtPasswordRegistration"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/txtPasswordRegistrationRe"
+        android:layout_alignStart="@+id/txtPasswordRegistrationRe"
+        android:layout_centerVertical="true"
+        android:background="#11000000"
+        android:drawableLeft="@drawable/ic_action_password"
+        android:ems="10"
+        android:hint="Hasło"
+        android:inputType="textPassword"
+        android:textSize="16dp" />
+
+    <EditText
+        android:id="@+id/txtPasswordRegistrationRe"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/txtPasswordRegistration"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="17dp"
+        android:background="#11000000"
+        android:drawableLeft="@drawable/ic_action_password"
+        android:ems="10"
+        android:hint="Powtórz hasło"
+        android:inputType="textPassword"
+        android:textSize="16dp" />
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_above="@+id/txtBack"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="19dp"
+        android:onClick="btnRegistrationUser_Click"
+        app:cardBackgroundColor="#598ac2"
+        app:cardCornerRadius="25dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/txtBack"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView3"
-            android:ems="10"
-            android:inputType="textPassword" />
+            android:layout_alignParentRight="true">
 
-        <EditText
-            android:id="@+id/txtEmailAddress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView2"
-            android:ems="10"
-            android:inputType="textEmailAddress" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Zarejestruj"
+                android:textColor="#fff"
+                android:textSize="24sp" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
 
-        <Button
-            android:id="@+id/btnRegistrationUser"
-            android:onClick="btnRegistrationUser_Click"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="144dp"
-            android:text="Zarejestruj" />
+    <TextView
+        android:id="@+id/txtBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="41dp"
+        android:onClick="back"
+        android:text="Wróć"
+        android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/txtBack"
-            android:textSize= "20sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="18dp"
-            android:onClick="back"
-            android:text="Wróć" />
-
-    </RelativeLayout>
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

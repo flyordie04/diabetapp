@@ -1,80 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient"
     tools:context="com.example.mirek.diabetapp.LoginActivity">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:text="Wpisz swój adres e-mail:" />
 
         <EditText
             android:id="@+id/txtEmailLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView2"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_above="@+id/txtPasswordLogin"
+            android:layout_alignLeft="@+id/txtPasswordLogin"
+            android:layout_alignStart="@+id/txtPasswordLogin"
+            android:layout_marginBottom="24dp"
             android:ems="10"
-            android:inputType="textEmailAddress" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/txtEmailLogin"
-            android:layout_marginTop="21dp"
-            android:text="Wpisz hasło:" />
+            android:hint="E-mail"
+            android:drawableLeft="@drawable/ic_action_user"
+            android:inputType="textEmailAddress"
+            android:textSize="16dp"
+            android:background="#11000000"/>
 
         <EditText
             android:id="@+id/txtPasswordLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView3"
-            android:ems="10"
-            android:inputType="textPassword" />
-
-
-
-        <Button
-            android:id="@+id/btnUserLogin"
-            android:onClick="btnUserLogin_Click"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="140dp"
-            android:text="Zaloguj" />
+            android:layout_centerVertical="true"
+            android:ems="10"
+            android:hint="Hasło"
+            android:drawableLeft="@drawable/ic_action_password"
+            android:inputType="textPassword"
+            android:textSize="16dp"
+            android:background="#11000000"/>
+
 
         <TextView
             android:id="@+id/txtBack"
-            android:textSize= "20sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="18dp"
+            android:layout_marginBottom="41dp"
             android:onClick="back"
-            android:text="Wróć" />
+            android:text="Rejestracja"
+            android:textSize="20sp" />
 
-    </RelativeLayout>
-</android.support.constraint.ConstraintLayout>
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="26dp"
+            app:srcCompat="@drawable/splash_without" />
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_above="@+id/txtBack"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:onClick="btnUserLogin_Click"
+            app:cardBackgroundColor="#598ac2"
+            app:cardCornerRadius="25dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_above="@+id/txtBack"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="Zaloguj"
+                            android:textColor="#fff"
+                            android:textSize="24sp" />
+                </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+</RelativeLayout>
