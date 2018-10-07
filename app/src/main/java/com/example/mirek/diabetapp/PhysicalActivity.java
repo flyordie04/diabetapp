@@ -150,7 +150,7 @@ public class PhysicalActivity extends AppCompatActivity implements AdapterView.O
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM dd yyyy hh:mm");
         if(user != null) {
             String email = ""+user.getUid();
-            mDatabaseReference.child(email).child("physical_activity").child(simpleDateFormat.format(dateTime.getTime())).child(physicalActivity).setValue(calories);
+            mDatabaseReference.child("users").child(email).child("physical_activity").child(simpleDateFormat.format(dateTime.getTime())).child(physicalActivity).setValue(calories);
             AlertDialog alertDialog = new AlertDialog.Builder(PhysicalActivity.this).create();
             alertDialog.setMessage("Brawo! Podczas tej aktywności straciłeś " + calories +" kalorii!");
             alertDialog.setTitle("Aktywność fizyczna");

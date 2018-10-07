@@ -86,8 +86,8 @@ public class Settings extends AppCompatActivity {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
 
-                if(dataSnapshot.child(user.getUid()).child("settings").getValue()!= null) {
-                    String phoneNumber = dataSnapshot.child(user.getUid()).child("settings").getValue(UserInformation.class).getPhone_number();
+                if(dataSnapshot.child("users").child(user.getUid()).child("settings").getValue()!= null) {
+                    String phoneNumber = dataSnapshot.child("users").child(user.getUid()).child("settings").getValue(UserInformation.class).getPhone_number();
                     etPhoneNumber.setText(phoneNumber, TextView.BufferType.EDITABLE);
 }
             }
@@ -121,7 +121,7 @@ public class Settings extends AppCompatActivity {
         String number = ""+etPhoneNumber.getText().toString();
         if(user != null) {
             String email = ""+user.getUid();
-            mDatabaseReference.child(email).child("settings").child("phone_number").setValue(number);
+            mDatabaseReference.child("users").child(email).child("settings").child("phone_number").setValue(number);
 
             if(cbDiabete.isChecked()) {
                 notification();

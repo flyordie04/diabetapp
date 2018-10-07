@@ -1,24 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
     <item android:id="@+id/home"
+        android:icon="@drawable/ic_add_result"
         android:title="Dodaj wynik badania">
     </item>
     <item android:id="@+id/addInsulin"
+        android:icon="@drawable/ic_add_result"
         android:title="Dodaj insulinę">
     </item>
     <item android:id="@+id/addActivity"
+        android:icon="@drawable/ic_add_result"
         android:title="Dodaj aktywność fizyczną">
     </item>
     <item android:id="@+id/statistics"
+        android:icon="@drawable/ic_statistics"
         android:title="Statystyki">
     </item>
     <item android:id="@+id/table"
+        android:icon="@drawable/ic_table_carbo"
         android:title="Tabela wymienników">
     </item>
     <item android:id="@+id/settings"
+        android:icon="@drawable/ic_settings"
         android:title="Ustawienia">
     </item>
     <item android:id="@+id/log"
+        android:icon="@drawable/ic_logout"
         android:title="Wyloguj">
     </item>
+    </group>
 </menu>

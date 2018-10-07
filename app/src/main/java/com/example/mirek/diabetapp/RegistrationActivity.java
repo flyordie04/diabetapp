@@ -26,7 +26,6 @@ public class RegistrationActivity extends AppCompatActivity{
     private FirebaseAuth firebaseAuth;
 
     private TextView textBack;
-
     SharedPreferences sp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +39,6 @@ public class RegistrationActivity extends AppCompatActivity{
         txtPassword = findViewById(R.id.txtPasswordRegistration);
         txtPasswordRe = findViewById(R.id.txtPasswordRegistrationRe);
         firebaseAuth = FirebaseAuth.getInstance();
-
         sp = getSharedPreferences("login",MODE_PRIVATE);
     }
 
@@ -52,7 +50,6 @@ public class RegistrationActivity extends AppCompatActivity{
                 Toast.makeText(RegistrationActivity.this,"Hasła nie mogą się różnić!", Toast.LENGTH_LONG).show();
             } else {
                 final ProgressDialog progressDialog = ProgressDialog.show(RegistrationActivity.this, "Proszę czekać...", "Rejestracja w toku.", true);
-
                 (firebaseAuth.createUserWithEmailAndPassword(txtEmailAddress.getText().toString(), txtPassword.getText().toString()))
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override

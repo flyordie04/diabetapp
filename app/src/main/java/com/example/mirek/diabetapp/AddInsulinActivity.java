@@ -122,7 +122,7 @@ public class AddInsulinActivity extends AppCompatActivity {
 
         if(user != null) {
             String email = ""+user.getUid();
-            mDatabaseReference.child(email).child("insulin").child(date).child(time).setValue(stringNumber);
+            mDatabaseReference.child("users").child(email).child("insulin").child(date).child(time).setValue(stringNumber);
 
             AlertDialog alertDialog = new AlertDialog.Builder(AddInsulinActivity.this).create();
             alertDialog.setMessage("Powodzenie, przyjęta insulina została dodana");

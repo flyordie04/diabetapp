@@ -15,7 +15,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="35dp"
         app:srcCompat="@drawable/splash_without" />
 
             <TextView
