@@ -26,6 +26,8 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.support.v7.widget.Toolbar;
+
+import com.example.mirek.diabetapp.models.DrawerHeader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -90,17 +92,17 @@ public class AddResult extends AppCompatActivity {
 
         updateTextLabel();
 
-
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
 
 
         //MENU
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.addResultToolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(null);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_action_name);
         configureNavigationDrawer();
 
@@ -172,7 +174,6 @@ public class AddResult extends AppCompatActivity {
     }
     private void updateResult(){
         final Dialog d = new Dialog(AddResult.this);
-        d.setTitle("NumberPicker");
         d.setContentView(R.layout.dialog);
         Button b1 = d.findViewById(R.id.button1);
         Button b2 = d.findViewById(R.id.button2);
@@ -226,31 +227,52 @@ public class AddResult extends AppCompatActivity {
 
 
     public void addResult(View v){
-        String stringNumber=textResult.getText().toString();
-        int number = Integer.parseInt(textResult.getText().toString());
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM dd yyyy hh:mm");
-        if(user != null) {
-            String email = ""+user.getUid();
-            mDatabaseReference.child("users").child(email).child("diabetes").child(simpleDateFormat.format(dateTime.getTime())).setValue(stringNumber);
-            if(number<70 || number >140) {
-                Intent i = new Intent(AddResult.this, SendSmsActivity.class);
-                Log.e("wynik cukru", stringNumber);
-                i.putExtra("STRING_I_NEED", stringNumber);
-                i.putExtra("DATA_BADANIA", simpleDateFormat.format(dateTime.getTime()));
-                startActivity(i);
-            } else {
-                AlertDialog alertDialog = new AlertDialog.Builder(AddResult.this).create();
-                alertDialog.setMessage("Wartość dodana - poziom cukru w normie");
-                alertDialog.setTitle("Poziom cukru dodany");
-                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+        final String stringNumber=textResult.getText().toString();
+        final int number = Integer.parseInt(textResult.getText().toString());
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM dd yyyy hh:mm");
 
+        final Dialog confirmation = new Dialog (AddResult.this);
+        confirmation.setContentView(R.layout.dialog_confirmation);
+        Button confirm = confirmation.findViewById(R.id.confirm);
+        Button back = confirmation.findViewById(R.id.back);
+
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(user != null) {
+                    String email = ""+user.getUid();
+                    mDatabaseReference.child("users").child(email).child("diabetes").child(simpleDateFormat.format(dateTime.getTime())).setValue(stringNumber);
+                    if(number<70 || number >140) {
+                        Intent i = new Intent(AddResult.this, SendSmsActivity.class);
+                        Log.e("wynik cukru", stringNumber);
+                        i.putExtra("STRING_I_NEED", stringNumber);
+                        i.putExtra("DATA_BADANIA", simpleDateFormat.format(dateTime.getTime()));
+                        startActivity(i);
+                    } else {
+                        AlertDialog alertDialog = new AlertDialog.Builder(AddResult.this).create();
+                        alertDialog.setMessage("Wartość dodana - poziom cukru w normie");
+                        alertDialog.setTitle("Poziom cukru dodany");
+                        alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        });
+                        alertDialog.show();
                     }
-                });
-                alertDialog.show();
+                }
+                confirmation.dismiss();
             }
-        }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                confirmation.dismiss();
+            }
+        });
+        confirmation.show();
+
 
     }
 

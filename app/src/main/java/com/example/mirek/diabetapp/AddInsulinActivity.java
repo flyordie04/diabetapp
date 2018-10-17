@@ -2,17 +2,21 @@ package com.example.mirek.diabetapp;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -32,12 +36,11 @@ public class AddInsulinActivity extends AppCompatActivity {
 
     private TextView textDate;
     private TextView textTime;
-    private TextView textBack;
-
-    private EditText etInsulin;
+    private TextView textResult;
 
     private Button btnDate;
     private Button btnTime;
+    private Button btnResult;
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
@@ -50,14 +53,11 @@ public class AddInsulinActivity extends AppCompatActivity {
 
         textDate = findViewById(R.id.txtDatePicker);
         textTime = findViewById(R.id.txtTimePicker);
-        textBack = findViewById(R.id.txtBack);
-
-        textBack.setPaintFlags(textBack.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-
-        etInsulin = findViewById(R.id.etInsulin);
+        textResult = findViewById(R.id.txtInsulinPicker);
 
         btnDate = findViewById(R.id.btnDatePicker);
         btnTime = findViewById(R.id.btnTimePicker);
+        btnResult = findViewById(R.id.btnInsulinPicker);
 
         btnDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,13 +72,58 @@ public class AddInsulinActivity extends AppCompatActivity {
                 updateTime();
             }
         });
+        btnResult.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateInsulin();
+            }
+        });
+
 
         updateTextLabel();
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
-    }
 
+
+        //MENU
+        Toolbar toolbar = findViewById(R.id.addInsulinToolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Dodaj insulinę");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+    public void updateInsulin(){
+        final Dialog d = new Dialog(AddInsulinActivity.this);
+        d.setContentView(R.layout.dialog);
+        Button b1 = d.findViewById(R.id.button1);
+        Button b2 = d.findViewById(R.id.button2);
+        final NumberPicker np = d.findViewById(R.id.numberPicker1);
+        np.setMaxValue(300);
+        np.setMinValue(0);
+        np.setValue(Integer.parseInt(textResult.getText().toString()));
+        np.setWrapSelectorWheel(false);
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                textResult.setText(String.valueOf(np.getValue()));
+                d.dismiss();
+            }
+        });
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                d.dismiss();
+            }
+        });
+        d.show();
+    }
     private void updateDate(){
         new DatePickerDialog(this, d, dateTime.get(Calendar.YEAR), dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH)).show();
     }
@@ -116,25 +161,45 @@ public class AddInsulinActivity extends AppCompatActivity {
 
 
     public void addInsulin(View v){
-        String date = ""+formatDate.format(dateTime.getTime());
-        String time = ""+formatTime.format(dateTime.getTime());
-        String stringNumber = ""+etInsulin.getText();
+        final String date = ""+formatDate.format(dateTime.getTime());
+        final String time = ""+formatTime.format(dateTime.getTime());
+        final String stringNumber = ""+textResult.getText();
 
-        if(user != null) {
-            String email = ""+user.getUid();
-            mDatabaseReference.child("users").child(email).child("insulin").child(date).child(time).setValue(stringNumber);
+        final Dialog confirmation = new Dialog (AddInsulinActivity.this);
+        confirmation.setContentView(R.layout.dialog_confirmation);
+        Button confirm = confirmation.findViewById(R.id.confirm);
+        Button back = confirmation.findViewById(R.id.back);
 
-            AlertDialog alertDialog = new AlertDialog.Builder(AddInsulinActivity.this).create();
-            alertDialog.setMessage("Powodzenie, przyjęta insulina została dodana");
-            alertDialog.setTitle("Przyjęta insulina");
-            alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                if(user != null) {
+                String email = ""+user.getUid();
+                mDatabaseReference.child("users").child(email).child("insulin").child(date).child(time).setValue(stringNumber);
+
+                AlertDialog alertDialog = new AlertDialog.Builder(AddInsulinActivity.this).create();
+                alertDialog.setMessage("Powodzenie, przyjęta insulina została dodana");
+                alertDialog.setTitle("Przyjęta insulina");
+                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                alertDialog.show();
                 }
-            });
-            alertDialog.show();
-        }
+                confirmation.dismiss();
+            }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                confirmation.dismiss();
+            }
+        });
+        confirmation.show();
 
     }
 

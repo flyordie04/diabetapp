@@ -58,7 +58,7 @@ public class RegistrationActivity extends AppCompatActivity{
 
                                 if (task.isSuccessful()) {
                                     Toast.makeText(RegistrationActivity.this, "Rejestracja powiodła się!", Toast.LENGTH_LONG).show();
-                                    Intent i = new Intent(RegistrationActivity.this, LoginActivity.class);
+                                    Intent i = new Intent(RegistrationActivity.this, Settings.class);
                                     sp.edit().putBoolean("logged", true).apply();
                                     startActivity(i);
                                 } else {

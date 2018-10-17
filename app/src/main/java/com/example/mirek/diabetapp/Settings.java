@@ -8,9 +8,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteCursor;
 import android.graphics.Paint;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,6 +47,7 @@ public class Settings extends AppCompatActivity {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     private EditText etPhoneNumber;
+    private EditText etWeight;
 
     private CheckBox cbDiabete;
     DateFormat formatTime = DateFormat.getTimeInstance();
@@ -53,14 +56,13 @@ public class Settings extends AppCompatActivity {
 
     private Button btnTime;
 
-    private TextView textBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
         etPhoneNumber = findViewById(R.id.etPhoneNumber);
-        textBack = findViewById(R.id.txtBack);
+        etWeight = findViewById(R.id.etWeight);
 
         textTime = findViewById(R.id.txtTimePicker);
         btnTime = findViewById(R.id.btnTimePicker);
@@ -75,8 +77,6 @@ public class Settings extends AppCompatActivity {
         updateTextLabel();
         cbDiabete = findViewById(R.id.cbDiabete);
 
-        textBack.setPaintFlags(textBack.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
 
@@ -86,9 +86,13 @@ public class Settings extends AppCompatActivity {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
 
-                if(dataSnapshot.child("users").child(user.getUid()).child("settings").getValue()!= null) {
+                if(dataSnapshot.child("users").child(user.getUid()).child("settings").child("phone_number").getValue()!= null) {
                     String phoneNumber = dataSnapshot.child("users").child(user.getUid()).child("settings").getValue(UserInformation.class).getPhone_number();
                     etPhoneNumber.setText(phoneNumber, TextView.BufferType.EDITABLE);
+                    if(dataSnapshot.child("users").child(user.getUid()).child("settings").child("weight").getValue()!= null) {
+                        String weight = dataSnapshot.child("users").child(user.getUid()).child("settings").getValue(UserInformation.class).getWeight();
+                        etWeight.setText(weight, TextView.BufferType.EDITABLE);
+                    }
 }
             }
 
@@ -100,6 +104,18 @@ public class Settings extends AppCompatActivity {
             }
         });
 
+        //MENU
+        Toolbar toolbar = findViewById(R.id.settingsToolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Ustawienia");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
     private void updateTime(){
         new TimePickerDialog(this, t, dateTime.get(Calendar.HOUR_OF_DAY), dateTime.get(Calendar.MINUTE), true).show();
@@ -119,10 +135,11 @@ public class Settings extends AppCompatActivity {
 
     public void saveSettings(View v){
         String number = ""+etPhoneNumber.getText().toString();
+        String weight = ""+etWeight.getText().toString();
         if(user != null) {
             String email = ""+user.getUid();
             mDatabaseReference.child("users").child(email).child("settings").child("phone_number").setValue(number);
-
+            mDatabaseReference.child("users").child(email).child("settings").child("weight").setValue(weight);
             if(cbDiabete.isChecked()) {
                 notification();
             }
@@ -147,9 +164,5 @@ public class Settings extends AppCompatActivity {
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, dateTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
-    public void back(View v){
-        Intent i = new Intent(Settings.this, AddResult.class);
-        startActivity(i);
-    }
 
 }

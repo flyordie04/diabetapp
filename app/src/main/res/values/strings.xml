@@ -17,14 +17,33 @@
 
     <string-array name="physical_types">
         <item>Aerobik</item>
+        <item>Biathlon</item>
         <item>Bieganie</item>
-        <item>Chodzenie</item>
-        <item>Jazda na rolkach</item>
-        <item>Jazda na rowerze</item>
+        <item>Bieganie szybkie</item>
+        <item>Bieg na nartach</item>
+        <item>Boks</item>
+        <item>Gimnastyka</item>
+        <item>Hokej</item>
+        <item>Jazda na łyżwach</item>
+        <item>Jazda na nartach</item>
+        <item>Jeździectwo</item>
+        <item>Judo</item>
+        <item>Kajakarstwo</item>
+        <item>Kolarstwo (25 km/h)</item>
+        <item>Kolarstwo (13 km/h)</item>
         <item>Koszykówka</item>
+        <item>Kręgle</item>
+        <item>Łucznictwo</item>
+        <item>Ogrodnictwo</item>
         <item>Piłka nożna</item>
         <item>Pływanie</item>
+        <item>Podnoszenie ciężarów</item>
+        <item>Rugby</item>
         <item>Siatkówka</item>
-        <item>Sztuki walki</item>
+        <item>Taniec</item>
+        <item>Tenis stołowy</item>
+        <item>Tenis ziemny</item>
+        <item>Wioślarstwo</item>
+        <item>Zapasy</item>
     </string-array>
 </resources>

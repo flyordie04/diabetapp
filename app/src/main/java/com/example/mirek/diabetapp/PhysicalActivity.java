@@ -2,14 +2,19 @@ package com.example.mirek.diabetapp;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,30 +24,32 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
+import com.example.mirek.diabetapp.models.Calories;
+import com.example.mirek.diabetapp.models.UserInformation;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class PhysicalActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class PhysicalActivity extends AppCompatActivity {
 
     DateFormat formatDate = DateFormat.getDateInstance();
-    DateFormat formatTime = DateFormat.getTimeInstance();
     Calendar dateTime = Calendar.getInstance();
 
     private TextView textDate;
-    private TextView textTime;
-    private TextView textBack;
-    private TextView txtChosen;
 
     private EditText etTimeInterval;
 
     private Button btnDate;
-    private Button btnTime;
 
     private Spinner spinner;
 
@@ -57,24 +64,17 @@ public class PhysicalActivity extends AppCompatActivity implements AdapterView.O
 
 
         textDate = findViewById(R.id.txtDatePicker);
-        textTime = findViewById(R.id.txtTimePicker);
-        textBack = findViewById(R.id.txtBack);
-        txtChosen = findViewById(R.id.txtChosen);
 
         etTimeInterval = findViewById(R.id.etTimeInterval);
         etTimeInterval.addTextChangedListener(new CheckTime());
-
-        textBack.setPaintFlags(textBack.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         spinner = findViewById(R.id.spinner1);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.
                 createFromResource(this,R.array.physical_types, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
 
         btnDate = findViewById(R.id.btnDatePicker);
-        btnTime = findViewById(R.id.btnTimePicker);
 
         btnDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,37 +83,55 @@ public class PhysicalActivity extends AppCompatActivity implements AdapterView.O
             }
         });
 
-        btnTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updateTime();
-            }
-        });
 
         updateTextLabel();
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
-    }
+        //MENU
+        Toolbar toolbar = findViewById(R.id.physicalToolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Dodaj aktywność fizyczną");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
 
+
+
+
+        mDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+
+
+                if(dataSnapshot.child("users").child(user.getUid()).child("settings").child("weight").getValue()== "") {
+                    settings();
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("ERROR", "Failed to read value.", error.toException());
+                Toast.makeText(PhysicalActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
     @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        String physicalActivity = adapterView.getItemAtPosition(i).toString();
-        txtChosen.setText(physicalActivity);
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
 
     private void updateDate(){
         new DatePickerDialog(this, d, dateTime.get(Calendar.YEAR), dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    private void updateTime(){
-        new TimePickerDialog(this, t, dateTime.get(Calendar.HOUR_OF_DAY), dateTime.get(Calendar.MINUTE), true).show();
-    }
 
     DatePickerDialog.OnDateSetListener d = new DatePickerDialog.OnDateSetListener() {
         @Override
@@ -126,88 +144,76 @@ public class PhysicalActivity extends AppCompatActivity implements AdapterView.O
         }
     };
 
-    TimePickerDialog.OnTimeSetListener t = new TimePickerDialog.OnTimeSetListener() {
-        @Override
-        public void onTimeSet(TimePicker timePicker, int i, int i1) {
-            dateTime.set(Calendar.HOUR_OF_DAY, i);
-            dateTime.set(Calendar.MINUTE, i1);
-            updateTextLabel();
-
-        }
-    };
 
     private void updateTextLabel(){
 
         textDate.setText(formatDate.format(dateTime.getTime()));
-        textTime.setText(formatTime.format(dateTime.getTime()));
     }
 
 
     public void addPhysical(View v){
-        String timeInterval = ""+etTimeInterval.getText().toString();
-        String physicalActivity = ""+txtChosen.getText();
-        double calories = calories(Integer.parseInt(timeInterval));
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM dd yyyy hh:mm");
-        if(user != null) {
-            String email = ""+user.getUid();
-            mDatabaseReference.child("users").child(email).child("physical_activity").child(simpleDateFormat.format(dateTime.getTime())).child(physicalActivity).setValue(calories);
-            AlertDialog alertDialog = new AlertDialog.Builder(PhysicalActivity.this).create();
-            alertDialog.setMessage("Brawo! Podczas tej aktywności straciłeś " + calories +" kalorii!");
-            alertDialog.setTitle("Aktywność fizyczna");
-            alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
+
+        mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                String timeInterval = ""+etTimeInterval.getText().toString();
+                String physicalActivity = ""+spinner.getSelectedItem().toString();
+                String weight = dataSnapshot.child("users").child(user.getUid()).child("settings").child("weight").getValue().toString();
+                Calories calories1 = new Calories();
+                if(!weight.equals("")) {
+                    double sum = calories1.activityCalories(Integer.parseInt(timeInterval), Integer.parseInt(weight), physicalActivity);
+                    Log.e("sum", String.valueOf(sum));
+
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM dd yyyy hh:mm");
+                    if(user != null) {
+                        String email = ""+user.getUid();
+                        mDatabaseReference.child("users").child(email).child("physical_activity").child(simpleDateFormat.format(dateTime.getTime())).child(physicalActivity).setValue(sum);
+                        AlertDialog alertDialog = new AlertDialog.Builder(PhysicalActivity.this).create();
+                        alertDialog.setMessage("Brawo! Podczas tej aktywności straciłeś " + sum +" kalorii!");
+                        alertDialog.setTitle("Aktywność fizyczna");
+                        alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        });
+                        alertDialog.show();
+                    }
+                    else {
+                        settings();
+                    }
+
+
 
                 }
-            });
-            alertDialog.show();
-        }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("ERROR", "Failed to read value.", error.toException());
+            }
+        });
+
 
     }
 
-    public void back(View v){
-        Intent i = new Intent(PhysicalActivity.this, AddResult.class);
-        startActivity(i);
-    }
 
-    private double calories(double time){
-
-        String physicalActivity = ""+txtChosen.getText();
-        double i = 0;
-        if(physicalActivity.equals("Aerobik")){
-            i = time * 7.3;
+void settings(){
+    AlertDialog dialog = new AlertDialog.Builder(PhysicalActivity.this).create();
+    dialog.setMessage("Dodaj swoją wagę w ustawieniach aby wynik był dokładniejszy.");
+    dialog.setTitle("Aktywność fizyczna");
+    dialog.setButton("Przejdź do ustawień", new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+            Intent ii = new Intent(PhysicalActivity.this, Settings.class);
+            startActivity(ii);
         }
-        else if(physicalActivity.equals("Bieganie")){
-            i = time * 7.0;
-        }
-        else if(physicalActivity.equals("Pływanie")){
-            i = time * 8.5;
-        }
-        else if(physicalActivity.equals("Chodzenie")){
-            i = time * 3.5;
-        }
-        else if(physicalActivity.equals("Jazda na rolkach")){
-            i = time * 8.5;
-        }
-        else if(physicalActivity.equals("Jazda na rowerze")){
-            i = time * 7.5;
-        }
-        else if(physicalActivity.equals("Koszykówka")){
-            i = time * 6.5;
-        }
-        else if(physicalActivity.equals("Piłka nożna")){
-            i = time * 8;
-        }
-        else if(physicalActivity.equals("Siatkówka")){
-            i = time * 6;
-        }
-        else if(physicalActivity.equals("Pływanie")){
-            i = time * 8.5;
-        }
-
-        return i;
-
-    }
+    });
+    dialog.show();
+}
 
     class CheckTime implements TextWatcher{
         public void afterTextChanged(Editable s) {
