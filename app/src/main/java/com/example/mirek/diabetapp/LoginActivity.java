@@ -1,5 +1,6 @@
 package com.example.mirek.diabetapp;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,9 +8,12 @@ import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,6 +77,35 @@ public class LoginActivity extends AppCompatActivity {
     public void back(View v){
         Intent i = new Intent(LoginActivity.this, RegistrationActivity.class);
         startActivity(i);
+    }
+
+    public void passwordRemember(View v){
+        final Dialog d = new Dialog(LoginActivity.this);
+        d.setContentView(R.layout.password_remember);
+        final EditText editText = d.findViewById(R.id.rememberEmail);
+        CardView cardView = d.findViewById(R.id.sendPassword);
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String email = editText.getText().toString();
+                sendPassword(email);
+                d.dismiss();
+            }
+        });
+        d.show();
+    }
+
+    public void sendPassword(String email){
+        firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()){
+                    Toast.makeText(LoginActivity.this, "Hasło zostało wysłane na wskazy adres e-mail.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(LoginActivity.this, "Błędny adres e-mail.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     public void goToMainActivity(){

@@ -8,6 +8,17 @@
     tools:context="com.example.mirek.diabetapp.LoginActivity">
 
 
+        <TextView
+            android:id="@+id/remember"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtPasswordLogin"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="28dp"
+            android:onClick="passwordRemember"
+            android:text="Nie pamiętasz hasła?"
+            android:textSize="20sp" />
+
         <EditText
             android:id="@+id/txtEmailLogin"
             android:layout_width="200dp"

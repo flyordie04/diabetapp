@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteCursor;
 import android.graphics.Paint;
 import android.support.v7.app.ActionBar;
@@ -55,6 +56,8 @@ public class Settings extends AppCompatActivity {
     private TextView textTime;
 
     private Button btnTime;
+
+    SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +114,8 @@ public class Settings extends AppCompatActivity {
         actionBar.setTitle("Ustawienia");
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
+
+        sp = getSharedPreferences("login",MODE_PRIVATE);
     }
     @Override
     public boolean onSupportNavigateUp() {
@@ -154,6 +159,54 @@ public class Settings extends AppCompatActivity {
             });
             alertDialog.show();
         }
+    }
+    public void saveNewAccount(View v){
+        final android.app.AlertDialog alertDialog = new android.app.AlertDialog.Builder(Settings.this).create();
+        alertDialog.setMessage("Upewnij się że wpisane dane są prawidłowe");
+        alertDialog.setTitle("Zmiana e-mail i hasła");
+        final EditText updateEmail = findViewById(R.id.updateEmail);
+        final EditText updatePassword = findViewById(R.id.updatePassword);
+        alertDialog.setButton("Zmień", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String email = updateEmail.getText().toString();
+                String password = updatePassword.getText().toString();
+                user.updateEmail(email);
+                user.updatePassword(password);
+                Toast.makeText(Settings.this, "E-mail i hasło zostały zmienione", Toast.LENGTH_SHORT).show();
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.setButton2("Wróć", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
+    }
+
+    public void deleteAccount(View v){
+        final android.app.AlertDialog alertDialog = new android.app.AlertDialog.Builder(Settings.this).create();
+        alertDialog.setMessage("Czy chcesz bezpowrotnie usunąć konto?");
+        alertDialog.setTitle("Usuwanie konta");
+        alertDialog.setButton("Usuń konto", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                user.delete();
+                alertDialog.dismiss();
+                sp.edit().putBoolean("logged",false).apply();
+                Intent intent = new Intent(Settings.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+        alertDialog.setButton2("Wróć", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
     }
     private void notification(){
 
