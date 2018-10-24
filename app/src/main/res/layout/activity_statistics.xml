@@ -1,39 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.mirek.diabetapp.StatisticsActivity">
+    tools:context="com.example.mirek.diabetapp.StatisticsActivity"
+    android:background="@drawable/gradient">
 
-    <RelativeLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/statisticsToolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="56dp"
+        android:layout_alignParentTop="true"
+        android:background="#FFF"/>
 
-        <ImageButton
-            android:id="@+id/imageButton2"
-            android:layout_width="wrap_content"
-            android:layout_height="274dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:onClick="diabeteStatistics"
-            app:srcCompat="@drawable/salatka"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="248dp" />
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/statisticsToolbar"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        app:cardBackgroundColor="#fff"
+        app:cardCornerRadius="25dp">
 
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="411dp"
-            android:layout_height="257dp"
-            android:layout_above="@+id/imageButton2"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:onClick="physicalStatistics"
-            app:srcCompat="@drawable/bieganie"
-            tools:layout_editor_absoluteX="-14dp"
-            tools:layout_editor_absoluteY="0dp" />
-    </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-</android.support.constraint.ConstraintLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:gravity="center"
+                android:text="Zakres dat"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="(Naciśnij datę aby ją zmienić)"
+                android:gravity="center"
+                android:textSize="12sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/timeFrom"
+                        android:textSize="18sp"
+                        android:layout_marginStart="30dp"
+                        android:onClick="timeFrom"/>
+
+                    <TextView
+                        android:id="@+id/timeTo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="18sp"
+                        android:gravity="end"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginStart="100dp"
+                        android:onClick="timeTo"/>
+            </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <CheckBox
+                    android:id="@+id/diabetesChart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:buttonTint="#ff0000"
+                    android:text="Poziom cukru"
+                    android:textColor="#ff0000"
+                    android:gravity="center"/>
+
+                <CheckBox
+                    android:id="@+id/physicalChart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Aktywność fizyczna"
+                    android:textColor="#00ff00"
+                    android:buttonTint="#00ff00"
+                    android:gravity="center"/>
+                <CheckBox
+                    android:id="@+id/insulinChart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Ilość insuliny"
+                    android:textColor="#0000ff"
+                    android:buttonTint="#0000ff"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+
+
+
+        <com.jjoe64.graphview.GraphView
+            android:id="@+id/statisticsGraph"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>

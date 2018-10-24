@@ -26,6 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class AddInsulinActivity extends AppCompatActivity {
@@ -164,6 +165,7 @@ public class AddInsulinActivity extends AppCompatActivity {
         final String date = ""+formatDate.format(dateTime.getTime());
         final String time = ""+formatTime.format(dateTime.getTime());
         final String stringNumber = ""+textResult.getText();
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM dd yyyy hh:mm");
 
         final Dialog confirmation = new Dialog (AddInsulinActivity.this);
         confirmation.setContentView(R.layout.dialog_confirmation);
@@ -176,8 +178,8 @@ public class AddInsulinActivity extends AppCompatActivity {
 
                 if(user != null) {
                 String email = ""+user.getUid();
-                mDatabaseReference.child("users").child(email).child("insulin").child(date).child(time).setValue(stringNumber);
-
+                //mDatabaseReference.child("users").child(email).child("insulin").child(date).child(time).setValue(stringNumber);
+                mDatabaseReference.child("users").child(email).child("insulin").child(simpleDateFormat.format(dateTime.getTime())).setValue(stringNumber);
                 AlertDialog alertDialog = new AlertDialog.Builder(AddInsulinActivity.this).create();
                 alertDialog.setMessage("Powodzenie, przyjęta insulina została dodana");
                 alertDialog.setTitle("Przyjęta insulina");

@@ -197,7 +197,6 @@ public class PhysicalActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
 
