@@ -21,13 +21,14 @@ import java.util.Date;
  */
 
 public class InsulinData {
+
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private DataPoint[] results;
 
 
-    public DataPoint[] Insulin(){
+    public DataPoint[] Insulin(long timeFrom, long timeTo){
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
@@ -39,34 +40,28 @@ public class InsulinData {
                 results = value;
             }
         };
-        Log.e("1","1");
-        readData(firebaseCallback);
+        readData(firebaseCallback, timeFrom, timeTo);
 
-        Log.e("3","3");
         if(results != null) {
-            Log.e("results",results.toString());
             return results;
-        }
-        return results;
+        } else return null;
     }
 
 
-    public void readData(final FirebaseCallback firebaseCallback) {
+    public void readData(final FirebaseCallback firebaseCallback, final long timeFrom, final long timeTo) {
         mDatabaseReference.child("users").child(user.getUid()).child("insulin").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //long timeFrom = dateFrom.getTime(), timeTo = dateTo.getTime();
                 ArrayList<DataPoint> dpArrayList = new ArrayList<>();
                 for (DataSnapshot mDataSnapshot : dataSnapshot.getChildren()) {
                     String data = mDataSnapshot.getKey();
-                    Log.e("data",data);
 
                     try{
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM dd yyyy hh:mm");
                         Date xValue = simpleDateFormat.parse(data);
-                        //long time = xValue.getTime();
+                        long time = xValue.getTime();
 
-                        //if(time>= timeFrom && time <= timeTo){
+                        if(time>= timeFrom && time <= timeTo){
 
                         try {
                             double value = Double.parseDouble(mDataSnapshot.getValue(String.class));
@@ -75,7 +70,7 @@ public class InsulinData {
                         } catch (NumberFormatException ex) {
                             ex.printStackTrace();
                         }
-                        //}
+                        }
 
 
 
@@ -84,8 +79,11 @@ public class InsulinData {
                     }
                 }
                 DataPoint[] dp = dpArrayList.toArray(new DataPoint[dpArrayList.size()]);
-                firebaseCallback.onCallback(dp);
-                //series.resetData(dp);
+                if(dp.length > 0){
+                    firebaseCallback.onCallback(dp);
+                } else {
+                    firebaseCallback.onCallback(null);
+                }
             }
 
             @Override

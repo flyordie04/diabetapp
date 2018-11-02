@@ -1,7 +1,10 @@
 package com.example.mirek.diabetapp.models;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.mirek.diabetapp.StatisticsActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,7 +29,7 @@ public class ResultsData {
     private DataPoint[] results;
 
 
-    public DataPoint[] Results(){
+    public DataPoint[] Results(long timeFrom, long timeTo){
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
@@ -38,34 +41,28 @@ public class ResultsData {
                 results = value;
             }
         };
-        Log.e("1","1");
-            readData(firebaseCallback);
+            readData(firebaseCallback, timeFrom, timeTo);
 
-        Log.e("3","3");
         if(results != null) {
-            Log.e("results",results.toString());
             return results;
-        }
-        return results;
+        } else return null;
     }
 
 
-    public void readData(final FirebaseCallback firebaseCallback) {
+    public void readData(final FirebaseCallback firebaseCallback, final long timeFrom, final long timeTo) {
         mDatabaseReference.child("users").child(user.getUid()).child("diabetes").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //long timeFrom = dateFrom.getTime(), timeTo = dateTo.getTime();
                 ArrayList<DataPoint> dpArrayList = new ArrayList<>();
                 for (DataSnapshot mDataSnapshot : dataSnapshot.getChildren()) {
                     String data = mDataSnapshot.getKey();
-                    Log.e("data",data);
 
                     try{
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM dd yyyy hh:mm");
                         Date xValue = simpleDateFormat.parse(data);
-                        //long time = xValue.getTime();
+                        long time = xValue.getTime();
 
-                        //if(time>= timeFrom && time <= timeTo){
+                        if(time>= timeFrom && time <= timeTo){
 
                         try {
                             double value = Double.parseDouble(mDataSnapshot.getValue(String.class));
@@ -74,7 +71,7 @@ public class ResultsData {
                         } catch (NumberFormatException ex) {
                             ex.printStackTrace();
                         }
-                        //}
+                        }
 
 
 
@@ -83,8 +80,11 @@ public class ResultsData {
                     }
                 }
                 DataPoint[] dp = dpArrayList.toArray(new DataPoint[dpArrayList.size()]);
-                firebaseCallback.onCallback(dp);
-                //series.resetData(dp);
+                if(dp.length > 0){
+                    firebaseCallback.onCallback(dp);
+                } else {
+                    firebaseCallback.onCallback(null);
+                }
             }
 
             @Override

@@ -1,5 +1,6 @@
 package com.example.mirek.diabetapp.models;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -14,7 +15,11 @@ import com.jjoe64.graphview.series.DataPoint;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeSet;
 
 /**
  * Created by Mirek on 22.10.2018.
@@ -28,55 +33,54 @@ public class PhysicalData {
     private DataPoint[] results;
 
 
-    public DataPoint[] Physical(){
+    public DataPoint[] Physical(long timeFrom, long timeTo){
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
 
 
-        final FirebaseCallback firebaseCallback = new FirebaseCallback() {
+        final FirebaseCallbackPhysical firebaseCallback = new FirebaseCallbackPhysical() {
             @Override
-            public void onCallback(DataPoint[] value) {
+            public void onCallback(DataPoint[] value, ArrayList type) {
                 results = value;
             }
         };
-        Log.e("1","1");
-        readData(firebaseCallback);
+            readData(firebaseCallback, timeFrom, timeTo);
 
-        Log.e("3","3");
         if(results != null) {
-            Log.e("results",results.toString());
             return results;
-        }
-        return results;
+        } else return null;
     }
 
 
-    public void readData(final FirebaseCallback firebaseCallback) {
+    public void readData(final FirebaseCallbackPhysical firebaseCallback, final long timeFrom, final long timeTo) {
         mDatabaseReference.child("users").child(user.getUid()).child("physical_activity").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //long timeFrom = dateFrom.getTime(), timeTo = dateTo.getTime();
                 ArrayList<DataPoint> dpArrayList = new ArrayList<>();
+                ArrayList<String> typeList = new ArrayList<>();
                 for (DataSnapshot mDataSnapshot : dataSnapshot.getChildren()) {
                     String data = mDataSnapshot.getKey();
-                    Log.e("data",data);
 
                     try{
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM dd yyyy hh:mm");
                         Date xValue = simpleDateFormat.parse(data);
-                        //long time = xValue.getTime();
-
-                        //if(time>= timeFrom && time <= timeTo){
+                        long time = xValue.getTime();
+                        Log.e("date physical",xValue.toString());
+                        if(time>= timeFrom && time <= timeTo){
 
                         try {
-                            double value = Double.parseDouble(mDataSnapshot.getValue(String.class));
-                            Log.e("value",String.valueOf(value));
-                            dpArrayList.add(new DataPoint(xValue,value));
+                            for (DataSnapshot dataSnapshot1 : mDataSnapshot.getChildren()){
+                                String type = dataSnapshot1.getKey();
+                                double value = dataSnapshot1.getValue(Double.class) / 10;
+                                Log.e("type",type);
+                                dpArrayList.add(new DataPoint(xValue,value));
+                                typeList.add(type);
+                            }
                         } catch (NumberFormatException ex) {
                             ex.printStackTrace();
                         }
-                        //}
+                        }
 
 
 
@@ -85,8 +89,13 @@ public class PhysicalData {
                     }
                 }
                 DataPoint[] dp = dpArrayList.toArray(new DataPoint[dpArrayList.size()]);
-                firebaseCallback.onCallback(dp);
-                //series.resetData(dp);
+                String type = TextUtils.join(", ",typeList);
+                Log.e("typearray",type);
+                if(dp.length > 0){
+                    firebaseCallback.onCallback(dp, typeList);
+                } else {
+                    firebaseCallback.onCallback(null,null);
+                }
             }
 
             @Override

@@ -27,7 +27,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.support.v7.widget.Toolbar;
 
-import com.example.mirek.diabetapp.models.DrawerHeader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -45,6 +44,7 @@ public class AddResult extends AppCompatActivity {
     private TextView textDate;
     private TextView textTime;
     private TextView textResult;
+    private TextView username;
 
     Button btnDate;
     Button btnTime;
@@ -96,6 +96,7 @@ public class AddResult extends AppCompatActivity {
         mDatabaseReference = mFirebaseDatabase.getReference();
 
 
+
         //MENU
         Toolbar toolbar = findViewById(R.id.addResultToolbar);
         setSupportActionBar(toolbar);
@@ -116,6 +117,12 @@ public class AddResult extends AppCompatActivity {
         switch (itemId){
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
+
+                username = findViewById(R.id.drawer_username);
+                String text = "Witaj " + user.getEmail() + "!";
+                Log.e("text",text);
+                username.setText(text);
+
                 return true;
         }
         return super.onOptionsItemSelected(item);

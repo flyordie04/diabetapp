@@ -106,7 +106,7 @@ public class AddInsulinActivity extends AppCompatActivity {
         Button b1 = d.findViewById(R.id.button1);
         Button b2 = d.findViewById(R.id.button2);
         final NumberPicker np = d.findViewById(R.id.numberPicker1);
-        np.setMaxValue(300);
+        np.setMaxValue(60);
         np.setMinValue(0);
         np.setValue(Integer.parseInt(textResult.getText().toString()));
         np.setWrapSelectorWheel(false);
