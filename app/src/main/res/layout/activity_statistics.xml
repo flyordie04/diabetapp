@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.mirek.diabetapp.StatisticsActivity"
-    android:background="@drawable/gradient">
+    >
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/statisticsToolbar"
@@ -14,22 +14,16 @@
         android:layout_alignParentTop="true"
         android:background="#FFF"/>
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cardView2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/statisticsToolbar"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        app:cardBackgroundColor="#fff"
-        app:cardCornerRadius="25dp">
+
 
         <LinearLayout
+            android:id="@+id/statisticsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="#CCFFCC"
+            android:layout_below="@+id/statisticsToolbar"
+            >
 
             <TextView
                 android:layout_width="match_parent"
@@ -106,13 +100,13 @@
 
 
 
-        <com.jjoe64.graphview.GraphView
-            android:id="@+id/statisticsGraph"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+
     </LinearLayout>
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/statisticsGraph"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/statisticsLayout"/>
 
-
-    </android.support.v7.widget.CardView>
 
 </RelativeLayout>

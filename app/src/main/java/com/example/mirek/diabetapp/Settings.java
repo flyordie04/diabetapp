@@ -141,7 +141,7 @@ public class Settings extends AppCompatActivity {
     public void saveSettings(View v){
         String number = ""+etPhoneNumber.getText().toString();
         String weight = ""+etWeight.getText().toString();
-        if(user != null) {
+        if(user != null && !number.equals("") && !weight.equals("")) {
             String email = ""+user.getUid();
             mDatabaseReference.child("users").child(email).child("settings").child("phone_number").setValue(number);
             mDatabaseReference.child("users").child(email).child("settings").child("weight").setValue(weight);
@@ -158,32 +158,44 @@ public class Settings extends AppCompatActivity {
                 }
             });
             alertDialog.show();
+        } else {
+            Toast.makeText(Settings.this, "Wartości nie mogą być puste!", Toast.LENGTH_SHORT).show();
         }
     }
     public void saveNewAccount(View v){
         final android.app.AlertDialog alertDialog = new android.app.AlertDialog.Builder(Settings.this).create();
         alertDialog.setMessage("Upewnij się że wpisane dane są prawidłowe");
         alertDialog.setTitle("Zmiana e-mail i hasła");
-        final EditText updateEmail = findViewById(R.id.updateEmail);
-        final EditText updatePassword = findViewById(R.id.updatePassword);
-        alertDialog.setButton("Zmień", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                String email = updateEmail.getText().toString();
-                String password = updatePassword.getText().toString();
-                user.updateEmail(email);
-                user.updatePassword(password);
-                Toast.makeText(Settings.this, "E-mail i hasło zostały zmienione", Toast.LENGTH_SHORT).show();
-                alertDialog.dismiss();
-            }
-        });
-        alertDialog.setButton2("Wróć", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                alertDialog.dismiss();
-            }
-        });
-        alertDialog.show();
+        EditText updateEmail = findViewById(R.id.updateEmail);
+        EditText updatePassword = findViewById(R.id.updatePassword);
+        final String email = updateEmail.getText().toString();
+        final String password = updatePassword.getText().toString();
+        if(user != null && (!email.equals("") || !password.equals(""))) {
+            alertDialog.setButton("Zmień", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                    if(!email.equals("")){
+                        user.updateEmail(email);
+                        Toast.makeText(Settings.this, "E-mail został zmieniony.", Toast.LENGTH_SHORT).show();
+                    }
+                    if(!password.equals("")) {
+                        user.updatePassword(password);
+                        Toast.makeText(Settings.this, "Hasło zostało zmienione.", Toast.LENGTH_SHORT).show();
+                    }
+                    alertDialog.dismiss();
+                }
+            });
+            alertDialog.setButton2("Wróć", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    alertDialog.dismiss();
+                }
+            });
+            alertDialog.show();
+        } else {
+            Toast.makeText(Settings.this, "Wartości nie mogą być puste!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void deleteAccount(View v){

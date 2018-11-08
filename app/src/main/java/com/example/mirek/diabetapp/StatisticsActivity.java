@@ -48,7 +48,7 @@ public class StatisticsActivity extends AppCompatActivity {
     //PointsGraphSeries insulin2;
 
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM");
-    SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm dd-MM-YYYY");
+    SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm dd-MM-yyyy");
 
     private TextView txtFrom;
     private TextView txtTo;
@@ -184,7 +184,6 @@ public class StatisticsActivity extends AppCompatActivity {
         if(physicalChart.isChecked()){
             final PhysicalData physicalData = new PhysicalData();
             physicalData.Physical(dateFromDB.getTime().getTime(), dateToDB.getTime().getTime());
-            DataPoint[] sth = new DataPoint[0];
 
             physicalData.readData(new FirebaseCallbackPhysical() {
                 @Override
@@ -194,11 +193,6 @@ public class StatisticsActivity extends AppCompatActivity {
                         physical2.resetData(value);
 
 
-                            //physical1.appendData(value[i],false, value.length);
-                            //physical2.appendData(value[i],false, value.length);
-                            //Log.e("Wartość",String.valueOf(value[i].getY()));
-                            //Log.e("długość", String.valueOf(value.length));
-                            //Log.e("data",sdf2.format(new Date((long) value[i].getX())));
 
                             physical2.setOnDataPointTapListener(new OnDataPointTapListener() {
                                 @Override
@@ -210,9 +204,6 @@ public class StatisticsActivity extends AppCompatActivity {
                                         }
                                     }}
                             });
-                            //physical1.resetData(value);
-                            //physical2.resetData(value);
-                        //}
                         Log.e("type adsf",type.toString());
                     } else {
                         mGraphView.removeSeries(physical1);
@@ -226,6 +217,7 @@ public class StatisticsActivity extends AppCompatActivity {
                 physical1.setColor(Color.GREEN);
                 mGraphView.addSeries(physical1);
                 physical2.setColor(Color.GREEN);
+                physical2.setSize(10);
                 mGraphView.addSeries(physical2);
 
 
@@ -330,6 +322,7 @@ public class StatisticsActivity extends AppCompatActivity {
                         results1.setColor(Color.RED);
                         mGraphView.addSeries(results1);
                         results2.setColor(Color.RED);
+                        results2.setSize(10);
                         mGraphView.addSeries(results2);
                         results2.setOnDataPointTapListener(new OnDataPointTapListener() {
                             @Override

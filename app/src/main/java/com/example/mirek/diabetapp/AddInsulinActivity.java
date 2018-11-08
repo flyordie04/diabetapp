@@ -162,8 +162,8 @@ public class AddInsulinActivity extends AppCompatActivity {
 
 
     public void addInsulin(View v){
-        final String date = ""+formatDate.format(dateTime.getTime());
-        final String time = ""+formatTime.format(dateTime.getTime());
+        //final String date = ""+formatDate.format(dateTime.getTime());
+        //final String time = ""+formatTime.format(dateTime.getTime());
         final String stringNumber = ""+textResult.getText();
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM dd yyyy hh:mm");
 

@@ -153,41 +153,63 @@ public class PhysicalActivity extends AppCompatActivity {
 
     public void addPhysical(View v){
 
+        final String timeInterval = "" + etTimeInterval.getText().toString();
+        if(!timeInterval.equals("")) {
         mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                String timeInterval = ""+etTimeInterval.getText().toString();
-                String physicalActivity = ""+spinner.getSelectedItem().toString();
-                String weight = dataSnapshot.child("users").child(user.getUid()).child("settings").child("weight").getValue().toString();
-                Calories calories1 = new Calories();
-                if(!weight.equals("")) {
-                    double sum = calories1.activityCalories(Integer.parseInt(timeInterval), Integer.parseInt(weight), physicalActivity);
-                    Log.e("sum", String.valueOf(sum));
+                final String physicalActivity = "" + spinner.getSelectedItem().toString();
+                final String weight = dataSnapshot.child("users").child(user.getUid()).child("settings").child("weight").getValue().toString();
 
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM dd yyyy hh:mm");
-                    if(user != null) {
-                        String email = ""+user.getUid();
-                        mDatabaseReference.child("users").child(email).child("physical_activity").child(simpleDateFormat.format(dateTime.getTime())).child(physicalActivity).setValue(sum);
-                        AlertDialog alertDialog = new AlertDialog.Builder(PhysicalActivity.this).create();
-                        alertDialog.setMessage("Brawo! Podczas tej aktywności straciłeś " + sum +" kalorii!");
-                        alertDialog.setTitle("Aktywność fizyczna");
-                        alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
 
+
+                    final Dialog confirmation = new Dialog(PhysicalActivity.this);
+                    confirmation.setContentView(R.layout.dialog_confirmation);
+                    Button confirm = confirmation.findViewById(R.id.confirm);
+                    Button back = confirmation.findViewById(R.id.back);
+
+                    confirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Log.e("3","3");
+                            Calories calories1 = new Calories();
+                            if (!weight.equals("")) {
+                                double sum = calories1.activityCalories(Integer.parseInt(timeInterval), Integer.parseInt(weight), physicalActivity);
+                                Log.e("sum", String.valueOf(sum));
+
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM dd yyyy hh:mm");
+                                if (user != null) {
+                                    String email = "" + user.getUid();
+                                    mDatabaseReference.child("users").child(email).child("physical_activity").child(simpleDateFormat.format(dateTime.getTime())).child(physicalActivity).setValue(sum);
+                                    AlertDialog alertDialog = new AlertDialog.Builder(PhysicalActivity.this).create();
+                                    alertDialog.setMessage("Brawo! Podczas tej aktywności straciłeś " + sum + " kalorii!");
+                                    alertDialog.setTitle("Aktywność fizyczna");
+                                    alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        }
+                                    });
+                                    alertDialog.show();
+                                }
+
+                            } else {
+                                settings();
                             }
-                        });
-                        alertDialog.show();
-                    }
-                    else {
-                        settings();
-                    }
+                            confirmation.dismiss();
+                        }
+                    });
 
+                    back.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            confirmation.dismiss();
+                        }
+                    });
+                    confirmation.show();
 
-
-                }
             }
 
             @Override
@@ -196,11 +218,14 @@ public class PhysicalActivity extends AppCompatActivity {
                 Log.w("ERROR", "Failed to read value.", error.toException());
             }
         });
-
+        } else {
+            Toast.makeText(PhysicalActivity.this, "Wpisz czas trwania aktywności!", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
-void settings(){
+private void settings(){
+        Log.e("weszło","weszło");
     AlertDialog dialog = new AlertDialog.Builder(PhysicalActivity.this).create();
     dialog.setMessage("Dodaj swoją wagę w ustawieniach aby wynik był dokładniejszy.");
     dialog.setTitle("Aktywność fizyczna");
