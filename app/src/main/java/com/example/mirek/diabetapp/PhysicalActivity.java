@@ -98,28 +98,6 @@ public class PhysicalActivity extends AppCompatActivity {
 
 
 
-
-        mDatabaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-
-
-                if(dataSnapshot.child("users").child(user.getUid()).child("settings").child("weight").getValue()== "") {
-                    settings();
-
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("ERROR", "Failed to read value.", error.toException());
-                Toast.makeText(PhysicalActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-
     }
     @Override
     public boolean onSupportNavigateUp() {
@@ -160,9 +138,9 @@ public class PhysicalActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                final String physicalActivity = "" + spinner.getSelectedItem().toString();
-                final String weight = dataSnapshot.child("users").child(user.getUid()).child("settings").child("weight").getValue().toString();
-
+                if(dataSnapshot.child("users").child(user.getUid()).child("settings").child("weight").getValue() != null) {
+                    final String physicalActivity = "" + spinner.getSelectedItem().toString();
+                    final String weight = dataSnapshot.child("users").child(user.getUid()).child("settings").child("weight").getValue().toString();
 
 
                     final Dialog confirmation = new Dialog(PhysicalActivity.this);
@@ -173,7 +151,7 @@ public class PhysicalActivity extends AppCompatActivity {
                     confirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Log.e("3","3");
+                            Log.e("3", "3");
                             Calories calories1 = new Calories();
                             if (!weight.equals("")) {
                                 double sum = calories1.activityCalories(Integer.parseInt(timeInterval), Integer.parseInt(weight), physicalActivity);
@@ -209,6 +187,9 @@ public class PhysicalActivity extends AppCompatActivity {
                         }
                     });
                     confirmation.show();
+                } else {
+                    settings();
+                }
 
             }
 

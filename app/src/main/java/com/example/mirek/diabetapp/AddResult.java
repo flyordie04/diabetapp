@@ -108,6 +108,13 @@ public class AddResult extends AppCompatActivity {
         configureNavigationDrawer();
 
         sp = getSharedPreferences("login",MODE_PRIVATE);
+
+        if(user == null){
+            sp.edit().putBoolean("logged",false).apply();
+            FirebaseAuth.getInstance().signOut();
+            Intent i = new Intent(AddResult.this, LoginActivity.class);
+            startActivity(i);
+        }
     }
 
     @Override

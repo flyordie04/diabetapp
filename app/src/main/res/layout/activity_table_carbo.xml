@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,16 +7,23 @@
     tools:context="com.example.mirek.diabetapp.TableCarboActivity">
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <ListView
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tableToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentTop="true"
+        android:background="#FFF">
+
+
+    </android.support.v7.widget.Toolbar>
+        <ExpandableListView
             android:id="@+id/listViewTable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/tableToolbar"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true" />
 
-    </RelativeLayout>
-</android.support.constraint.ConstraintLayout>
+
+</RelativeLayout>
