@@ -49,6 +49,10 @@ public class Settings extends AppCompatActivity {
 
     private EditText etPhoneNumber;
     private EditText etWeight;
+    private EditText etUserPhoneNumber;
+    private EditText etName;
+    private EditText etSurname;
+    private EditText etCity;
 
 
     SharedPreferences sp;
@@ -60,8 +64,10 @@ public class Settings extends AppCompatActivity {
 
         etPhoneNumber = findViewById(R.id.etPhoneNumber);
         etWeight = findViewById(R.id.etWeight);
-
-
+        etUserPhoneNumber = findViewById(R.id.etUserPhoneNumber);
+        etName = findViewById(R.id.etName);
+        etSurname = findViewById(R.id.etSurname);
+        etCity = findViewById(R.id.etCity);
 
 
 
@@ -77,11 +83,28 @@ public class Settings extends AppCompatActivity {
                 if(dataSnapshot.child("users").child(user.getUid()).child("settings").child("phone_number").getValue()!= null) {
                     String phoneNumber = dataSnapshot.child("users").child(user.getUid()).child("settings").getValue(UserInformation.class).getPhone_number();
                     etPhoneNumber.setText(phoneNumber, TextView.BufferType.EDITABLE);
+                }
                     if(dataSnapshot.child("users").child(user.getUid()).child("settings").child("weight").getValue()!= null) {
                         String weight = dataSnapshot.child("users").child(user.getUid()).child("settings").getValue(UserInformation.class).getWeight();
                         etWeight.setText(weight, TextView.BufferType.EDITABLE);
                     }
-}
+
+                if(dataSnapshot.child("users").child(user.getUid()).child("settings").child("city").getValue()!= null) {
+                    String city = dataSnapshot.child("users").child(user.getUid()).child("settings").getValue(UserInformation.class).getCity();
+                    etCity.setText(city, TextView.BufferType.EDITABLE);
+                }
+                if(dataSnapshot.child("users").child(user.getUid()).child("settings").child("name").getValue()!= null) {
+                    String name = dataSnapshot.child("users").child(user.getUid()).child("settings").getValue(UserInformation.class).getName();
+                    etName.setText(name, TextView.BufferType.EDITABLE);
+                }
+                if(dataSnapshot.child("users").child(user.getUid()).child("settings").child("surname").getValue()!= null) {
+                    String surname = dataSnapshot.child("users").child(user.getUid()).child("settings").getValue(UserInformation.class).getSurname();
+                    etSurname.setText(surname, TextView.BufferType.EDITABLE);
+                }
+                if(dataSnapshot.child("users").child(user.getUid()).child("settings").child("userPhoneNumber").getValue()!= null) {
+                    String userPhoneNumber = dataSnapshot.child("users").child(user.getUid()).child("settings").getValue(UserInformation.class).getUserPhoneNumber();
+                    etUserPhoneNumber.setText(userPhoneNumber, TextView.BufferType.EDITABLE);
+                }
             }
 
             @Override
@@ -111,11 +134,10 @@ public class Settings extends AppCompatActivity {
 
     public void saveSettings(View v){
         String number = ""+etPhoneNumber.getText().toString();
-        String weight = ""+etWeight.getText().toString();
-        if(user != null && !number.equals("") && !weight.equals("")) {
+
+        if(user != null && !number.equals("")) {
             String email = ""+user.getUid();
             mDatabaseReference.child("users").child(email).child("settings").child("phone_number").setValue(number);
-            mDatabaseReference.child("users").child(email).child("settings").child("weight").setValue(weight);
             android.app.AlertDialog alertDialog = new android.app.AlertDialog.Builder(Settings.this).create();
             alertDialog.setMessage("Dane zaktualizowane");
             alertDialog.setTitle("Ustawienia");
@@ -127,7 +149,7 @@ public class Settings extends AppCompatActivity {
             });
             alertDialog.show();
         } else {
-            Toast.makeText(Settings.this, "Wartości nie mogą być puste!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Settings.this, "Wartość nie może być pusta!", Toast.LENGTH_SHORT).show();
         }
     }
     public void saveNewAccount(View v){
@@ -187,6 +209,42 @@ public class Settings extends AppCompatActivity {
             }
         });
         alertDialog.show();
+    }
+
+    public void saveUserInfo(View v){
+        String weight = ""+etWeight.getText().toString();
+        String userPhoneNumber = ""+etUserPhoneNumber.getText().toString();
+        String name = ""+etName.getText().toString();
+        String surname = ""+etSurname.getText().toString();
+        String city = ""+etCity.getText().toString();
+
+        if(user != null) {
+            String email = ""+user.getUid();
+            mDatabaseReference.child("users").child(email).child("settings").child("weight").setValue(weight);
+            mDatabaseReference.child("users").child(email).child("settings").child("userPhoneNumber").setValue(userPhoneNumber);
+            mDatabaseReference.child("users").child(email).child("settings").child("name").setValue(name);
+            mDatabaseReference.child("users").child(email).child("settings").child("surname").setValue(surname);
+            mDatabaseReference.child("users").child(email).child("settings").child("city").setValue(city);
+            android.app.AlertDialog alertDialog = new android.app.AlertDialog.Builder(Settings.this).create();
+            alertDialog.setMessage("Dane zaktualizowane");
+            alertDialog.setTitle("Ustawienia");
+            alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+            alertDialog.show();
+        } else {
+            Toast.makeText(Settings.this, "Wartość nie może być pusta!", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+    public void doctors(View v){
+        Intent i = new Intent(Settings.this, DoctorsChooserActivity.class);
+        startActivity(i);
     }
 
 

@@ -38,7 +38,8 @@
         <activity android:name=".DiabeteStatisticsActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".PhysicalStatisticsActivity" />
-        <activity android:name=".TableCarboActivity"/>
+        <activity android:name=".TableCarboActivity" />
+        <activity android:name=".DoctorsChooserActivity"></activity>
     </application>
 
 </manifest>

@@ -88,7 +88,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String email = editText.getText().toString();
-                sendPassword(email);
+                if(!email.equals("")) {
+                    sendPassword(email);
+                } else {
+                    Toast.makeText(LoginActivity.this, "Wpisz adres e-mail!", Toast.LENGTH_SHORT).show();
+                }
                 d.dismiss();
             }
         });
